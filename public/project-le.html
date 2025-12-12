@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Skyward – Mini Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b1020; --bg2:#050814;
+      --border: rgba(255,255,255,.10);
+      --text:#eef3ff; --muted:#b0bec5;
+      --accent:#ffd54f;
+      --blue:#1e88e5;
+      --radius:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(circle at top, #222b4a 0, var(--bg2) 45%, #02030a 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a{color:inherit;text-decoration:none}
+
+    header{
+      position: sticky; top:0; z-index:10;
+      backdrop-filter: blur(12px);
+      background: rgba(5, 8, 20, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav{
+      max-width: 1100px; margin:0 auto;
+      padding: 14px 20px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:14px}
+    .logo-icon{
+      width:34px;height:34px;border-radius:999px;
+      background: radial-gradient(circle at 30% 0, #90caf9, #1e88e5 40%, #0d47a1 100%);
+      display:grid; place-items:center; font-size:14px;
+    }
+    .nav a{
+      color:#cfd8dc; font-size:14px;
+      padding:6px 10px; border-radius:999px;
+      transition:.18s;
+    }
+    .nav a:hover{background: rgba(255,255,255,.06); color:#fff}
+
+    main{max-width:1100px;margin:0 auto;padding: 22px 20px 50px; display:flex; flex-direction:column; gap:18px}
+    .hero{
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(20, 26, 47, 0.88), rgba(11, 16, 34, 0.96));
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 18px 18px 16px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.55);
+    }
+    .hero h1{font-size:22px;margin-bottom:8px}
+    .hero p{font-size:14px;color:#cfd8dc}
+    .hero .note{margin-top:10px; font-size:12px; color: var(--muted)}
+
+    .toolbar{display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between}
+    .tabs{
+      display:flex; gap:10px;
+      padding: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{
+      appearance:none; border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,243,255,0.92);
+      font-weight:800; font-size:13px;
+      padding: 10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      white-space:nowrap;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .tab:hover{transform: translateY(-1px); border-color: rgba(120,170,255,.30)}
+    .tab.is-active{background: rgba(30,136,229,.18); border-color: rgba(96,165,250,.55)}
+    .tab .count{opacity:.9}
+
+    .stats{display:flex; gap:10px; flex-wrap:wrap;}
+    .stat{
+      min-width: 140px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 10px 12px;
+    }
+    .stat .k{font-size:11px;color:var(--muted)}
+    .stat .v{margin-top:4px;font-size:18px;font-weight:900}
+
+    .list{display:flex; flex-direction:column; gap:14px; margin-top: 6px;}
+    .card{
+      border-radius: 18px;
+      background: rgba(5,10,26,0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 12px;
+      display:grid;
+      grid-template-columns: 240px 1fr;
+      gap: 14px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+      cursor: pointer;
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: 0 22px 55px rgba(0,0,0,0.55);
+    }
+    .img{
+      width:100%;
+      aspect-ratio: 1 / 1;
+      height:auto;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(30,136,229,0.18);
+      color: #90caf9;
+      border: 1px solid rgba(255,255,255,0.10);
+      margin-bottom: 6px;
+    }
+    .title{font-size:16px; font-weight:900; margin-bottom:6px}
+    .desc{font-size:13px; color:#cfd8dc; margin-bottom:10px}
+    .meta{
+      display:flex; flex-wrap:wrap; gap:10px;
+      color: var(--muted);
+      font-size: 12px;
+      align-items:center;
+    }
+    .badge-status{
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.22);
+    }
+    .badge-done{border-color: rgba(76,175,80,.35)}
+    .badge-active{border-color: rgba(255,213,79,.35)}
+    .badge-upcoming{border-color: rgba(144,202,249,.35)}
+
+    .open-hint{
+      margin-left:auto;
+      font-weight:800;
+      color: rgba(144,202,249,0.95);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .empty{
+      display:none;
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.02);
+      padding: 18px;
+      text-align:center;
+      color: rgba(176,190,197,0.95);
+      margin-top: 10px;
+    }
+
+    footer{
+      max-width:1100px; margin: 0 auto 18px;
+      padding: 0 20px;
+      font-size: 11px;
+      color: #90a4ae;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+
+    /* ===== Modal ===== */
+    .modal-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.70);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 999;
+      padding: 18px;
+    }
+    .modal-backdrop.show{display:flex;}
+    .modal{
+      width: min(980px, 100%);
+      max-height: 88vh;
+      overflow:auto;
+      border-radius: 20px;
+      background: #0d111f;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,0.85);
+    }
+    .modal-head{
+      position: sticky;
+      top: 0;
+      background: rgba(13, 17, 31, 0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 14px;
+    }
+    .modal-title{
+      font-weight: 950;
+      font-size: 14px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: rgba(234,243,255,0.92);
+    }
+    .modal-close{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      color: #eaf3ff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .modal-body{ padding: 14px; display:block; }
+    .modal-right{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 12px 12px 10px;
+    }
+    .modal-right h2{
+      font-size: 18px;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .modal-right .chip{margin-bottom:10px}
+    .modal-text{
+      font-size: 13px;
+      color:#cfd8dc;
+      white-space: pre-line;
+    }
+
+    /* thời gian + trạng thái sát phải */
+    .modal-meta{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      color: var(--muted);
+      font-size: 12px;
+      align-items:center;
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    /* 2 ảnh 1 hàng (Motivation Day) */
+    .modal-img-row{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 280px));
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .modal-img-square{
+      width: 100%;
+      max-width: 280px;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.06);
+      display:block;
+    }
+    @media (max-width: 700px){
+      .modal-img-row{ grid-template-columns: 1fr; }
+      .modal-img-square{ max-width: 360px; margin: 0 auto; }
+    }
+
+    /* Normal popup image (projects 2..6) */
+    .modal-img{
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.06);
+      margin: 0 auto 12px;
+      display:block;
+    }
+
+    /* ===== Split (Project #1) ===== */
+    .split{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .split-col{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 10px;
+    }
+    .split-title{
+      font-weight: 950;
+      font-size: 12px;
+      letter-spacing: .03em;
+      margin-bottom: 8px;
+      color: rgba(234,243,255,0.92);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .split-img{
+      width: 100%;
+      max-width: 260px;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.06);
+      margin: 0 auto 10px;
+      display:block;
+    }
+
+    .detail-list{
+      margin: 8px 0 10px;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-size: 13px;
+      color:#d9e3ff;
+    }
+    .detail-row{ display:flex; gap:10px; align-items:flex-start; }
+    .detail-k{ min-width: 92px; font-weight: 950; color: rgba(255,255,255,0.92); }
+    .detail-v{ color:#cfd8dc; flex:1; }
+    .bullet{ margin: 6px 0 0; padding-left: 18px; color:#cfd8dc; }
+    .bullet li{ margin: 2px 0; }
+    .bullet li::marker{ color: rgba(144,202,249,0.95); }
+
+    @media (max-width: 920px){
+      .card{grid-template-columns: 1fr;}
+      .stat{min-width: 150px}
+      .split{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="logo">
+        <div class="logo-icon">SW</div>
+        <div>Skyward Mini Projects</div>
+      </div>
+      <a href="#list">Xem danh sách</a>
+    </div>
+  </header>
+
+  <main>
+  <a href="index.html" class="btn-back">← Về trang chính</a>
+    <section class="hero">
+      <h1>Những project lẻ của Skyward 🩵</h1>
+      <p>
+        Tổng hợp các hoạt động nhỏ (gifts/hoa/chúc mừng/preview phát quà…) của Skyward & Supporters
+        để đồng hành cùng Sơn Tùng M-TP và cộng đồng SKY.
+      </p>
+      <div class="note">
+        * Tất cả chi phí cho các project này sử dụng quỹ nội bộ của Skyward 🩵
+      </div>
+    </section>
+
+    <div class="toolbar">
+      <div class="tabs" id="tabs">
+        <button class="tab is-active" data-filter="all">✨ Tất cả <span class="count" data-count="all">(0)</span></button>
+        <button class="tab" data-filter="active">🟢 Đang triển khai <span class="count" data-count="active">(0)</span></button>
+        <button class="tab" data-filter="done">✅ Hoàn thành <span class="count" data-count="done">(0)</span></button>
+        <button class="tab" data-filter="upcoming">📅 Sắp diễn ra <span class="count" data-count="upcoming">(0)</span></button>
+      </div>
+
+      <div class="stats" aria-label="Thống kê">
+        <div class="stat"><div class="k">Số project</div><div class="v" id="statTotal">0</div></div>
+        <div class="stat"><div class="k">Đang triển khai</div><div class="v" id="statActive">0</div></div>
+        <div class="stat"><div class="k">Hoàn thành</div><div class="v" id="statDone">0</div></div>
+      </div>
+    </div>
+
+    <div class="empty" id="empty">Không có project phù hợp bộ lọc này 🩵</div>
+
+    <div class="list" id="list">
+      <!-- 1) SKYMEET ĐÀ NẴNG - split popup -->
+      <article class="card"
+        data-status="done"
+        data-time="15/08/2025"
+        data-chip="🎁 Gift • Skymeet"
+        data-title="SKY GIFTS FOR SKYMEET #3 – LOVE IN ĐÀ NẴNG ✨🌊☁️✨"
+        data-img="images/minipr/skymeet.jpg"
+        data-img-sky="images/minipr/skymeet_sky.jpg"
+        data-img-tung="images/minipr/skymeet_Tung.jpg"
+        data-text-sky="Secret đầu tiên Skyward dành tặng cho các bầu trời đến rồi đây 🥳
+
+Team đã chuẩn bị những món quà thật cẩn thận để gửi gắm chúng đến SKY vào ngày quan trọng nhất.
+Tuy không nhiều nhưng đây là tấm lòng của các thành viên trong team dành cho SKY.
+Hẹn gặp các trai xinh gái đẹp vào thời khắc hoàng hôn đẹp nhất nha 🥺"
+        data-sky-qty="120"
+        data-sky-items="Postcard|Photocards|1 bí ẩn siu cưng"
+        data-text-tung="Món quà nhỏ của Skyward và supporter dành tặng Sơn Tùng M-TP tại Skymeet Đà Nẵng 🩵🩵"
+      >
+        <img class="img" src="images/minipr/skymeet.jpg" alt="Skymeet Đà Nẵng" />
+        <div>
+          <div class="chip">🎁 Gift • Event</div>
+          <div class="title">SKY GIFTS FOR SKYMEET #3 – LOVE IN ĐÀ NẴNG ✨🌊☁️✨</div>
+          <div class="desc">Quà cho SKY tham dự Skymeet#3 và Quà cho Tùng 🩵</div>
+          <div class="meta">
+            <span>📅 Thời gian: 15/08/2025</span>
+            <span class="badge-status badge-done">✅ Hoàn thành</span>
+            <span class="open-hint">Xem chi tiết →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2) ECOVACS FLOWERS -->
+      <article class="card"
+        data-status="done"
+        data-time="22/09/2025"
+        data-chip="💐 Flowers • Congrats"
+        data-title="Skyward & Supporters gửi hoa chúc mừng Ecovacs Việt Nam và Sơn Tùng M-TP ⛅️"
+        data-img="images/minipr/ecovas_chitiet.jpg"
+        data-text="Vì sao là cánh bướm?
+
+Trước là vì cánh bướm giống chữ X trong #XtraInEveryWay và dòng sản phẩm Tùng đại diện là X11.
+Sau là do ý nghĩa đẹp đẽ mà cánh bướm đại diện: tự do, hạnh phúc và sự thuận lợi.
+
+Đây cũng là những lời chúc mà team muốn gửi gắm đến Ecovacs và Tùng trong hành trình tương lai của cả hai.
+
+Thật ra lúc đầu slogan chính cho lẵng là E&T (Ecovacs và Tùng), nhưng cuối cùng vì một vài lý do đổi thành E🩵T.
+
+P/s: Team vẫn chưa thật sự hài lòng với thành phẩm lần này.
+Tụi mình sẽ cố gắng từng ngày để support Tùng tốt hơn nữa 🥹"
+      >
+        <img class="img" src="images/minipr/ecovas_hoa.jpg" alt="Ecovacs & ST" />
+        <div>
+          <div class="chip">💐 Flowers • Congrats</div>
+          <div class="title">Skyward & Supporters gửi hoa chúc mừng Ecovacs Việt Nam và Sơn Tùng M-TP ⛅️</div>
+          <div class="desc">Ý tưởng “cánh bướm” (X11 / #XtraInEveryWay) + slogan E🩵T – gửi lời chúc đẹp đến Ecovacs & Tùng.</div>
+          <div class="meta">
+            <span>📅 Thời gian: 22/09/2025</span>
+            <span class="badge-status badge-done">✅ Hoàn thành</span>
+            <span class="open-hint">Xem chi tiết →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3) MOTIVATION DAY (2 ảnh popup) -->
+      <article class="card"
+        data-status="done"
+        data-time="07/10/2025"
+        data-chip="🩵 Gift • Motivation Day"
+        data-title="Motivation Day Gifts – Món quà gửi trọn yêu thương từ Skyward 🩵✨"
+        data-img="images/minipr/tranh_debut.jpg"
+        data-img="images/minipr/traicay_debut.jpg"
+        data-text="Một món quà nhỏ đại diện cho ngàn lời chúc lớn, gửi đến người nghệ sĩ đã không ngừng tỏa sáng 🥹
+
+Cảm ơn những giai điệu, câu hát và khoảnh khắc chân thành mà Tùng đã gửi trao.
+Chúc Tùng mãi giữ ngọn lửa đam mê ❤️‍🔥
+
+Chân thành cảm ơn các Supporters, cảm ơn artist p.n.a.r.t,
+cảm ơn các anh chị đã giúp trao món quà này đến tận tay Tùng 🩵
+
+From Skyward & Supporters with endless love 🩵"
+      >
+        <img class="img" src="images/minipr/debut.jpg" alt="Motivation Day Gifts" />
+        <div>
+          <div class="chip">🩵 Gift • Motivation Day</div>
+          <div class="title">Motivation Day Gifts – Món quà gửi trọn yêu thương từ Skyward 🩵✨</div>
+          <div class="desc">Món quà nhỏ – lời chúc lớn. Cảm ơn Supporters & artist p.n.a.r.t đã đồng hành 🩵</div>
+          <div class="meta">
+            <span>📅 Thời gian: 07/10/2025</span>
+            <span class="badge-status badge-done">✅ Hoàn thành</span>
+            <span class="open-hint">Xem chi tiết →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4) HÚC FEST -->
+      <article class="card"
+        data-status="done"
+        data-time="07/09/2025"
+        data-chip="🔥 Gift • Húc Fest"
+        data-title="HÚC FEST GIFT PREVIEW ✨"
+        data-img="images/minipr/huc_banner.jpg"
+        data-text="✨𝐇𝐔́𝐂 𝐅𝐄𝐒𝐓 𝐆𝐈𝐅𝐓 𝐏𝐑𝐄𝐕𝐈𝐄𝐖 ✨
+Sky ơi, quà của SKYWARD đã sẵn sàng, chỉ chờ nhà mình bung hết sức cùng Sơn Tùng M-TP tại Công viên Yên Sở vào ngày 7/9 này thôi đóoooo 🔥
+Gift xinh yêu và cực ngầu dành đến cho Sky bao gồm: 
+	⭐️Quạt cầm tay
+ Số lượng:500
+ Thời gian phát: 10:00
+	⭐️Banner + Card
+Số lượng: 500 set
+Thời gian phát: 14:00
+Hẹn gặp những niềm tự hào của Tùng tại Húc Fest, cho chúng mình thấy bản lĩnh tới cùng HÚC TỚI ĐI! 🤟🤟🤟🔥🔥"
+      >
+        <img class="img" src="images/minipr/huc_gift.jpg" alt="Húc Fest" />
+        <div>
+          <div class="chip">🔥 Gift • Húc Fest</div>
+          <div class="title">HÚC FEST GIFT PREVIEW ✨</div>
+          <div class="desc">Quạt (500) + Banner&Card (500 set). Hẹn gặp Công viên Yên Sở 07/09 🔥</div>
+          <div class="meta">
+            <span>📅 Thời gian: 07/09/2025</span>
+            <span class="badge-status badge-done">✅ Hoàn thành</span>
+            <span class="open-hint">Xem chi tiết →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5) HAPPY BEE -->
+      <article class="card"
+        data-status="done"
+        data-time="18/09/2025"
+        data-chip="🐝 Gift • Happy Bee"
+        data-title="HAPPY BEE GIFT PREVIEW ✨"
+        data-img="images/minipr/bee.jpg"
+        data-text="Món quà nhỏ bé nhưng chan chứa tình cảm từ SKYWARD đã sẵn sàng gửi đến Sky tới cổ vũ Sơn Tùng M-TP tại Happy Bee 2025.
+Để đảm bảo những chiếc banner sẽ đến đúng tay gia đình mình thì team sẽ ưu tiên phát cho các bạn có Skylight hoặc để ảnh Sơn Tùng M-TP làm hình nền điện thoại nhaaaa
+🩵"
+      >
+        <img class="img" src="images/minipr/bee_banner.jpg" alt="Happy Bee" />
+        <div>
+          <div class="chip">🐝 Gift • Happy Bee</div>
+          <div class="title">HAPPY BEE GIFT PREVIEW ✨</div>
+          <div class="desc">Quà đã sẵn sàng. Thời gian/địa điểm phát cập nhật trong group Zalo Skyward 🩵</div>
+          <div class="meta">
+            <span>📅 Thời gian: 18/09/2025</span>
+            <span class="badge-status badge-done">✅ Hoàn thành</span>
+            <span class="open-hint">Xem chi tiết →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6) MODERN FEST -->
+      <article class="card"
+        data-status="done"
+        data-time="11/10/2025"
+        data-chip="🍜 Gift • Modern Fest"
+        data-title="PREVIEW GIFT MODERN FEST: TRẬN ĐỊA ĐA VỊ 🍜"
+        data-img="images/minipr/modern_gift.jpg"
+        data-text="Hà Nội gọi Sài Gòn trả lời 🤟
+
+📌 11/10/2025
+📍 Công Viên Bờ Sông Sài Gòn
+
+Số lượng: 2 vers banner phát ở 2 địa điểm khác nhau (phụ thuộc map).
+Thời gian/địa điểm phát cập nhật trong group Zalo của Skyward.
+
+Không say không về cùng Sơn Tùng M-TP nhé 🤟🩵"
+      >
+        <img class="img" src="images/minipr/modern_banner.jpg" alt="Modern Fest" />
+        <div>
+          <div class="chip">🍜 Gift • Modern Fest</div>
+          <div class="title">PREVIEW GIFT MODERN FEST: TRẬN ĐỊA ĐA VỊ 🍜</div>
+          <div class="desc">11/10/2025 – Công viên Bờ Sông Sài Gòn. 2 version banner phát theo map 🤟🩵</div>
+          <div class="meta">
+            <span>📅 Thời gian: 11/10/2025</span>
+            <span class="badge-status badge-done">✅ Hoàn thành</span>
+            <span class="open-hint">Xem chi tiết →</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <span>© Skyward – Mini Projects</span>
+    <span>Liên hệ: skyward@example.com</span>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <div class="modal-head">
+        <div class="modal-title">CHI TIẾT PROJECT</div>
+        <button class="modal-close" id="modalCloseBtn" type="button">Đóng ✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-right">
+          <div class="chip" id="mChip">—</div>
+          <h2 id="mTitle">—</h2>
+
+          <!-- Normal: 2 ảnh (prj3) -->
+          <div class="modal-img-row" id="mImgRow" style="display:none;">
+            <img class="modal-img-square" id="mImg1" src="" alt="" />
+            <img class="modal-img-square" id="mImg2" src="" alt="" />
+          </div>
+
+          <!-- Normal: 1 ảnh -->
+          <img class="modal-img" id="mImg" src="" alt="" />
+
+          <div class="modal-text" id="mText">—</div>
+
+          <!-- Split (project #1) -->
+          <div class="split" id="splitBox" style="display:none;">
+            <div class="split-col">
+              <div class="split-title">🎁 Quà cho SKY</div>
+              <img class="split-img" id="mSkyImg" src="" alt="" />
+
+              <div class="detail-list" id="skyDetail" style="display:none;">
+                <div class="detail-row">
+                  <div class="detail-k">Số lượng</div>
+                  <div class="detail-v" id="mSkyQty">—</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-k">Thành phần</div>
+                  <div class="detail-v">
+                    <ul class="bullet" id="mSkyItems"></ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-text" id="mSky">—</div>
+            </div>
+
+            <div class="split-col">
+              <div class="split-title">🩵 Quà cho Tùng</div>
+              <img class="split-img" id="mTungImg" src="" alt="" />
+              <div class="modal-text" id="mTung">—</div>
+            </div>
+          </div>
+
+          <div class="modal-meta">
+            <span id="mTime">📅 Thời gian: —</span>
+            <span class="badge-status" id="mStatus">—</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll("#tabs .tab");
+    const cards = Array.from(document.querySelectorAll(".card"));
+    const empty = document.getElementById("empty");
+
+    // Modal elements
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+    const mImgRow = document.getElementById("mImgRow");
+    const mImg1 = document.getElementById("mImg1");
+    const mImg2 = document.getElementById("mImg2");
+
+    const mImg = document.getElementById("mImg");
+    const mChip = document.getElementById("mChip");
+    const mTitle = document.getElementById("mTitle");
+    const mText = document.getElementById("mText");
+    const mTime = document.getElementById("mTime");
+    const mStatus = document.getElementById("mStatus");
+
+    // Split elements
+    const splitBox = document.getElementById("splitBox");
+    const mSky = document.getElementById("mSky");
+    const mTung = document.getElementById("mTung");
+    const mSkyImg = document.getElementById("mSkyImg");
+    const mTungImg = document.getElementById("mTungImg");
+    const skyDetail = document.getElementById("skyDetail");
+    const mSkyQty = document.getElementById("mSkyQty");
+    const mSkyItems = document.getElementById("mSkyItems");
+
+    function statusBadge(status){
+      if (status === "done") return { text: "✅ Hoàn thành", cls: "badge-done" };
+      if (status === "active") return { text: "🟢 Đang triển khai", cls: "badge-active" };
+      if (status === "upcoming") return { text: "📅 Sắp diễn ra", cls: "badge-upcoming" };
+      return { text: "💙 Khác", cls: "" };
+    }
+
+    function clearSkyItems(){
+      while (mSkyItems.firstChild) mSkyItems.removeChild(mSkyItems.firstChild);
+    }
+
+    function fillSkyItems(itemsStr){
+      clearSkyItems();
+      const raw = (itemsStr || "").trim();
+      if (!raw) return;
+
+      const parts = raw.includes("|") ? raw.split("|") : raw.split("\n");
+      parts.map(s => s.trim()).filter(Boolean).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        mSkyItems.appendChild(li);
+      });
+    }
+
+    function setImg(el, src, alt){
+      if (!el) return;
+      const s = (src || "").trim();
+      if (!s) {
+        el.style.display = "none";
+        el.removeAttribute("src");
+        el.alt = "";
+        return;
+      }
+      el.style.display = "";
+      el.src = s;
+      el.alt = alt || "";
+    }
+
+    function openModalFromCard(card){
+      const title = card.dataset.title || "—";
+      const chip  = card.dataset.chip  || "💙 Skyward";
+      const img   = card.dataset.img   || "";
+      const text  = card.dataset.text  || "";
+      const time  = card.dataset.time  || "—";
+      const stKey = card.dataset.status || "other";
+      const st    = statusBadge(stKey);
+
+      // 2 ảnh (prj3)
+      const img1 = (card.dataset.img1 || "").trim();
+      const img2 = (card.dataset.img2 || "").trim();
+
+      // Split fields (project #1)
+      const textSky  = (card.dataset.textSky || "").trim();
+      const textTung = (card.dataset.textTung || "").trim();
+      const imgSky   = (card.dataset.imgSky || "").trim();
+      const imgTung  = (card.dataset.imgTung || "").trim();
+      const skyQty   = (card.dataset.skyQty || "").trim();
+      const skyItems = (card.dataset.skyItems || "").trim();
+
+      mTitle.textContent = title;
+      mChip.textContent = chip;
+      mTime.textContent = "📅 Thời gian: " + time;
+
+      mStatus.textContent = st.text;
+      mStatus.classList.remove("badge-done","badge-active","badge-upcoming");
+      if (st.cls) mStatus.classList.add(st.cls);
+
+      // If has split -> show split, hide normal
+      if (textSky || textTung || imgSky || imgTung) {
+        splitBox.style.display = "grid";
+
+        // hide normal
+        mImgRow.style.display = "none";
+        setImg(mImg1, "", "");
+        setImg(mImg2, "", "");
+        mImg.style.display = "none";
+        setImg(mImg, "", "");
+        mText.style.display = "none";
+
+        // split images
+        setImg(mSkyImg, imgSky, "Quà cho SKY");
+        setImg(mTungImg, imgTung, "Quà cho Tùng");
+
+        // SKY detail box
+        if (skyQty || skyItems) {
+          skyDetail.style.display = "";
+          mSkyQty.textContent = skyQty ? (skyQty + " phần") : "—";
+          fillSkyItems(skyItems);
+        } else {
+          skyDetail.style.display = "none";
+          mSkyQty.textContent = "—";
+          clearSkyItems();
+        }
+
+        mSky.textContent  = textSky || "—";
+        mTung.textContent = textTung || "—";
+      } else {
+        // Normal mode (projects 2..6)
+        splitBox.style.display = "none";
+
+        // reset split stuff
+        setImg(mSkyImg, "", "");
+        setImg(mTungImg, "", "");
+        skyDetail.style.display = "none";
+        mSkyQty.textContent = "—";
+        clearSkyItems();
+        mSky.textContent = "";
+        mTung.textContent = "";
+
+        // 2 ảnh nếu có
+        if (img1 && img2) {
+          mImgRow.style.display = "grid";
+          setImg(mImg1, img1, title + " (1)");
+          setImg(mImg2, img2, title + " (2)");
+
+          mImg.style.display = "none";
+          setImg(mImg, "", "");
+        } else {
+          mImgRow.style.display = "none";
+          setImg(mImg1, "", "");
+          setImg(mImg2, "", "");
+
+          setImg(mImg, img, title);
+          // setImg sẽ tự hide nếu src rỗng
+        }
+
+        mText.style.display = "";
+        mText.textContent = text;
+      }
+
+      modalBackdrop.classList.add("show");
+      modalBackdrop.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      modalBackdrop.classList.remove("show");
+      modalBackdrop.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    // Click card -> open modal
+    cards.forEach(card=>{
+      card.addEventListener("click", ()=> openModalFromCard(card));
+      card.addEventListener("keydown", (e)=>{
+        if (e.key === "Enter" || e.key === " ") openModalFromCard(card);
+      });
+      card.setAttribute("tabindex","0");
+      card.setAttribute("role","button");
+      card.setAttribute("aria-label","Mở chi tiết project");
+    });
+
+    // Close handlers
+    modalCloseBtn.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e)=>{
+      if (e.target === modalBackdrop) closeModal();
+    });
+    document.addEventListener("keydown", (e)=>{
+      if (e.key === "Escape") closeModal();
+    });
+
+    // Filters + counts
+    function countAll(list){
+      const c = { all: list.length, active:0, done:0, upcoming:0 };
+      list.forEach(x => {
+        const s = x.dataset.status;
+        if (s === "active") c.active++;
+        else if (s === "done") c.done++;
+        else if (s === "upcoming") c.upcoming++;
+      });
+      return c;
+    }
+
+    function setCounts(c){
+      document.querySelectorAll(".count").forEach(el=>{
+        const k = el.getAttribute("data-count");
+        el.textContent = `(${c[k] ?? 0})`;
+      });
+      document.getElementById("statTotal").textContent = c.all;
+      document.getElementById("statActive").textContent = c.active;
+      document.getElementById("statDone").textContent = c.done;
+    }
+
+    function apply(filter){
+      let shown = 0;
+      cards.forEach(card=>{
+        const ok = (filter === "all") ? true : (card.dataset.status === filter);
+        card.style.display = ok ? "" : "none";
+        if (ok) shown++;
+      });
+      empty.style.display = (shown === 0) ? "block" : "none";
+
+      const visibleCards = cards.filter(c => c.style.display !== "none");
+      setCounts(countAll(visibleCards));
+    }
+
+    // init counts for all
+    setCounts(countAll(cards));
+
+    tabs.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        tabs.forEach(b=>b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        apply(btn.dataset.filter);
+      });
+    });
+  </script>
+</body>
+</html>

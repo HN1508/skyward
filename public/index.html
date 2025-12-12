@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Skyward Support Sơn Tùng M-TP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --primary-dark: #1565c0;
+      --bg: #0b1020;
+      --bg-soft: #141a2f;
+      --text: #f5f5f5;
+      --accent: #ffd54f;
+      --border-soft: #2a3556;
+      --danger: #e53935;
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #222b4a 0, #050814 40%, #02030a 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(5, 8, 20, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #90caf9, #1e88e5 40%, #0d47a1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      padding: 6px 10px;
+      border-radius: 999px;
+      transition: 0.2s;
+      color: #cfd8dc;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .nav-donate-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #263238;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    .nav-donate-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+      background: #ffe082;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    section {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(20, 26, 47, 0.88), rgba(11, 16, 34, 0.96));
+      border: 1px solid var(--border-soft);
+      padding: 20px 20px 18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.55);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-title h2 {
+      font-size: 18px;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #90caf9;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
+      gap: 22px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .hero-highlight {
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 14px;
+      color: #cfd8dc;
+    }
+
+    .hero-meta {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      color: #b0bec5;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(4,8,20,0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-card {
+      border-radius: 18px;
+      padding: 16px 14px;
+      background: radial-gradient(circle at top, rgba(144,202,249,0.28), rgba(21,101,192,0.92));
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #0b1020;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hero-card h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .hero-card small {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .project-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .project-card {
+      border-radius: 16px;
+      background: rgba(5, 10, 26, 0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 12px 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-chip {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(25, 118, 210, 0.18);
+      color: #90caf9;
+      align-self: flex-start;
+    }
+
+    .project-card h3 {
+      font-size: 14px;
+    }
+
+    .project-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #b0bec5;
+    }
+
+    .project-link {
+      margin-top: 6px;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #90caf9;
+    }
+
+    .fund-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.6fr);
+      gap: 20px;
+    }
+
+    .fund-main p {
+      font-size: 13px;
+      color: #cfd8dc;
+      margin-bottom: 8px;
+    }
+
+    .fund-meta {
+      font-size: 12px;
+      color: #b0bec5;
+    }
+
+    .fund-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(4,10,24,0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .fund-card {
+      border-radius: 18px;
+      padding: 12px 12px 10px;
+      background: radial-gradient(circle at top, rgba(255,213,79,0.2), rgba(21,17,5,0.95));
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff8e1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .fund-amount {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .fund-amount-main {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .fund-amount-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.8;
+    }
+
+    .fund-updated {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .fund-actions {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.18s;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: #ffca28;
+      color: #263238;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+    }
+
+    .btn-ghost {
+      background: rgba(0,0,0,0.32);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.26);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(0,0,0,0.55);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #0d111f;
+      border-radius: 18px;
+      padding: 14px 16px 14px;
+      max-width: 320px;
+      width: 90%;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.8);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #b0bec5;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 2px 4px;
+    }
+
+    .modal-body {
+      font-size: 13px;
+      color: #cfd8dc;
+    }
+
+    .qr-wrapper {
+      margin: 8px auto 6px;
+      padding: 10px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top, #263238, #0b1020);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .qr-wrapper img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .qr-bank-info {
+      font-size: 12px;
+      text-align: center;
+      color: #eceff1;
+    }
+
+    footer {
+      max-width: 1080px;
+      margin: 0 auto 18px;
+      padding: 0 20px;
+      font-size: 11px;
+      color: #90a4ae;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        flex-wrap: wrap;
+      }
+      .nav-links {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .hero, .fund-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      main {
+        padding-top: 18px;
+      }
+      .hero-card {
+        order: -1;
+      }
+    }
+
+    /* ===== UX polish (index) ===== */
+    html { scroll-behavior: smooth; }
+
+    .project-card {
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      will-change: transform;
+    }
+    .project-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 55px rgba(0,0,0,0.65);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    /* Project đang thực hiện: viền sáng nhấp nháy */
+    .project-card.is-active {
+      border-color: rgba(144,202,249,0.55);
+    }
+    .project-card.is-active::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top, rgba(144,202,249,0.35), rgba(30,136,229,0) 65%);
+      filter: blur(10px);
+      opacity: 0.75;
+      pointer-events: none;
+      animation: glowPulse 1.6s ease-in-out infinite;
+    }
+    .project-card.is-active::after {
+      content: "Đang thực hiện";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: #0b1020;
+      background: rgba(255, 213, 79, 0.95);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      pointer-events: none;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.35; transform: scale(0.985); }
+      50%      { opacity: 0.95; transform: scale(1.02); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .project-card:hover { transform: none; }
+      .project-card.is-active::before { animation: none; }
+    }
+
+    /* ===== Index: Filters / Stats / Thumbnails ===== */
+    .projects-toolbar{
+      display:flex; flex-wrap:wrap; gap:10px;
+      align-items:center; justify-content:space-between;
+      margin: 14px 0 18px;
+    }
+    .tabs{
+      display:flex; flex-wrap:wrap; gap:10px;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+    }
+    .tab-btn{
+      appearance:none; border:0; cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .02em;
+      color: rgba(230,236,245,0.85);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+      display:flex; gap:8px; align-items:center;
+    }
+    .tab-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); }
+    .tab-btn.active{ background: rgba(37,99,235,0.25); border-color: rgba(96,165,250,0.55); color:#eaf3ff; }
+
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:10px;
+      width: min(520px, 100%);
+    }
+    .stat-card{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 12px 14px;
+    }
+    .stat-label{ font-size: 11px; color: rgba(176,190,197,0.95); }
+    .stat-value{ margin-top:4px; font-size: 18px; font-weight: 900; color:#eaf3ff; }
+
+    @media (max-width: 720px){
+      .stats{ grid-template-columns: 1fr; }
+      .tabs{ width:100%; }
+    }
+
+    .project-card{
+      position: relative;
+      overflow: hidden;
+    }
+
+    .empty-state{
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.02);
+      padding: 18px;
+      text-align:center;
+      color: rgba(176,190,197,0.95);
+      margin-top: 14px;
+      display:none;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="logo">
+        <div class="logo-icon">ST</div>
+        <div>Skyward Support</div>
+      </div>
+      <div class="nav-links">
+        <a href="#gioi-thieu">Giới thiệu</a>
+        <a href="#projects">Dự án</a>
+        <a href="#fund">Quỹ donate</a>
+        <button class="nav-donate-btn" id="navDonateBtn">Góp quỹ ngay</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- GIỚI THIỆU FANBASE -->
+    <section id="gioi-thieu">
+      <div class="section-title">
+        <div>
+          <div class="section-tag">Giới thiệu fanbase</div>
+          <h2>Fanbase Skyward - All about Sơn Tùng M-TP</h2>
+        </div>
+      </div>
+
+      <div class="hero">
+        <div>
+          <h1>
+            Nơi quy tụ Sky
+            <span class="hero-highlight">đồng hành cùng Sơn Tùng M-TP</span>
+          </h1>
+          <p>
+            Xin chào mọi người, chúng mình là Skyward –  All About Sơn Tùng M-TP,
+Với khát khao được góp một phần nhỏ bé trong hành trình yêu thương và dõi theo chàng trai luôn sống hết mình vì âm nhạc, một trái tim chứa đầy hoài bão và ước mơ mang tên Nguyễn Thanh Tùng, Skyward ra đời như một góc trời riêng của những tâm hồn đồng điệu cùng nâng niu tấm thân nhỏ bé ấy.
+Skyward là nơi tình yêu dành cho Tùng không chỉ dừng lại ở cảm xúc, mà còn hoá thành những hành động cụ thể, bền bỉ và ý nghĩa.
+SKYWARD - Kỵ sĩ bầu trời - Only Sơn Tùng M-TP!.
+          </p>
+          <p style="margin-top: 6px;">
+            Website này tổng hợp thông tin các project, sao kê quỹ donate và hướng dẫn cách
+            tham gia support để Sky có thể theo dõi mọi thứ một cách minh bạch, rõ ràng.
+          </p>
+
+          <div class="hero-meta">
+            <div class="pill">
+              <span>✨</span>
+              <span>Fanbase project support</span>
+            </div>
+            <div class="pill">
+              <span>📊</span>
+              <span>Minh bạch quỹ donate</span>
+            </div>
+            <div class="pill">
+              <span>💙</span>
+              <span>Sky vì Sơn Tùng M-TP</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>Thông điệp từ Skyward</h3>
+          <p>
+            Giữa bầu trời mênh mông mang tên SKY, Skyward sẽ là một vì tinh tú nhỏ – âm thầm tỏa sáng, nhưng luôn hướng về một ngôi sao rực rỡ nhất: Sơn Tùng M-TP.
+Hy vọng rằng tụi mình sẽ nhận được sự ủng hộ từ các SKY để cùng nhau yêu thương Tùng nhiều hơn nữa trên chặng đường sắp tới!
+          </p>
+          <p>SKYWARD - Kỵ sĩ bầu trời - Only Sơn Tùng M-TP!</p>
+          <small>
+            Mọi hoạt động sử dụng quỹ đều được cập nhật công khai ở mục
+            <strong>Quỹ donate</strong> bên dưới.
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <!-- DANH SÁCH PROJECTS -->
+    <section id="projects">
+      <div class="section-title">
+        <div>
+          <div class="section-tag">Projects</div>
+          <h2>Tổng hợp các project do Skyward thực hiện</h2>
+        </div>
+        
+      </div>
+
+      <div class="projects-toolbar">
+        <div class="tabs" role="tablist" aria-label="Bộ lọc project">
+          <button class="tab-btn active" data-filter="all" type="button">✨ Tất cả <span class="tab-count" data-count="all"></span></button>
+          <button class="tab-btn" data-filter="active" type="button">🟢 Đang thực hiện <span class="tab-count" data-count="active"></span></button>
+          <button class="tab-btn" data-filter="completed" type="button">✅ Hoàn thành <span class="tab-count" data-count="completed"></span></button>
+          <button class="tab-btn" data-filter="offline" type="button">📍 Offline <span class="tab-count" data-count="offline"></span></button>
+          <button class="tab-btn" data-filter="streaming" type="button">🎧 Streaming <span class="tab-count" data-count="streaming"></span></button>
+        </div>
+      </div>
+
+      <div class="empty-state" id="projectsEmpty">
+        Không có project phù hợp bộ lọc này. Thử chọn tab khác nha 🩵
+      </div>
+
+      <div class="project-list" id="projectList">
+        <!-- Project 1 -->
+        <article class="project-card" data-cover="images/thumbnail/pr1.jpg">
+          <div class="project-chip">Event & Offline</div>
+          <h3>DỰ ÁN RA MẮT SKYWARD VÀ CHÚC MỪNG SINH NHẬT SƠN TÙNG M-TP</h3>
+          <p>
+            Dự án ra mắt fanbase Skyward đồng thời là dự án Chúc mừng sinh nhật the one and only của chúng ta: Nghệ sĩ Sơn Tùng M-TP.
+          </p>
+          <div class="project-meta">
+            <span>Thời gian: 07/2025</span>
+            <span>Trạng thái: Hoàn thành</span>
+          </div>
+          <a class="project-link" href="project-sinhnhat-2025.html">
+            Xem chi tiết project →
+          </a>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="project-card" data-cover="images/thumbnail/pr2.jpg">
+          <div class="project-chip">Streaming & Digital</div>
+          <h3>GIVEAWAY SKYLIGHT CHO SKY THAM GIA STREAM NHẠC TRÊN STATIONHEAD</h3>
+          <p>
+            Dự án dành cho Sky tham gia stream nhạc cho Sơn Tùng M-TP trên Stationhead nhằm lan tỏa tinh thần ủng hộ Tùng 💙
+          </p>
+          <div class="project-meta">
+            <span>Thời gian: 10/2025</span>
+            <span>Trạng thái: Đang thực hiện</span>
+          </div>
+          <a class="project-link" href="project-gift-sh.html">
+            Xem chi tiết project →
+          </a>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="project-card" data-cover="images/thumbnail/pr3.jpg">
+          <div class="project-chip">Event & Offline</div>
+          <h3>PROJECT "BIỂN XANH" VIETTEL Y-FEST 2025</h3>
+          <p>
+            Dự án phủ xanh show Y-Fest TP. Hồ Chí Minh 2025 như một món quà tinh thần ý nghĩa dành tặng Sơn Tùng M-TP và chính Sky trong tháng sinh nhật của chúng ta.
+          </p>
+          <div class="project-meta">
+            <span>Thời gian: 10/2025</span>
+            <span>Trạng thái: Hoàn thành</span>
+          </div>
+          <a class="project-link" href="project-yfest.html">
+            Xem chi tiết project →
+          </a>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="project-card" data-cover="images/thumbnail/pr4.jpg">
+          <div class="project-chip">Event & Offline</div>
+          <h3>PROJECT CHÚC MỪNG KỶ NIỆM 9 NĂM THÀNH LẬP M-TP ENTERTAINMENT</h3>
+          <p>
+            Dự án nhằm gửi lời chúc mừng chân thành nhất đến đại gia đình M-TP Entertainment với hành trình 9 năm.
+          </p>
+          <div class="project-meta">
+            <span>Thời gian: 10/2025</span>
+            <span>Trạng thái: Hoàn thành</span>
+          </div>
+          <a class="project-link" href="project-mtpe.html">
+            Xem chi tiết project →
+          </a>
+        </article>
+
+        <!-- Project 5 -->
+        <article class="project-card" data-cover="images/thumbnail/pr5.jpg">
+          <div class="project-chip">Event & Offline</div>
+          <h3>PROJECT MỪNG SINH NHẬT 13 TUỔI CỦA ĐẠI GIA ĐÌNH SKY </h3>
+          <p>
+            Skyward cùng một Skyboy giấu tên gửi tặng đại gia đình Sky món quà nhỏ nhân dịp sinh nhật tuổi 13 của đại gia đình Sky.
+          </p>
+          <div class="project-meta">
+            <span>Thời gian: 10/2025</span>
+            <span>Trạng thái: Đang thực hiện</span>
+          </div>
+          <a class="project-link" href="project-sky13.html">
+            Xem chi tiết project →
+          </a>
+        </article>
+
+        <!-- Project 6 -->
+        <article class="project-card" data-cover="images/thumbnail/pr6.jpg">
+          <div class="project-chip">Event & Offline</div>
+          <h3>Test</h3>
+          <p>
+            Dự án ra mắt fanbase Skyward đồng thời là dự án Chúc mừng sinh nhật the one and only của chúng ta: Nghệ sĩ Sơn Tùng M-TP.
+          </p>
+          <div class="project-meta">
+            <span>Thời gian: 10/2025</span>
+            <span>Trạng thái: Đang thực hiện</span>
+          </div>
+          <a class="project-link" href="project-donate.html">
+            Xem chi tiết project →
+          </a>
+        </article>
+
+        <!-- Project le -->
+        <article class="project-card" data-cover="images/thumbnail/pr_le.jpg">
+          <div class="project-chip">Streaming & Digital</div>
+          <h3>Những project lẻ của Skyward</h3>
+          <p>
+            Project nhỏ sử dụng quỹ nội bộ.
+          </p>
+          <div class="project-meta">
+            <span>Thời gian: 01/2025</span>
+            <span>Trạng thái: Tiếp tục cập nhật</span>
+          </div>
+          <a class="project-link" href="project-le.html">
+            Xem chi tiết project →
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- QUỸ DONATE -->
+    <section id="fund">
+      <div class="section-title">
+        <div>
+          <div class="section-tag">Quỹ donate support Sơn Tùng M-TP</div>
+          <h2>Minh bạch quỹ Skyward</h2>
+        </div>
+      </div>
+
+      <div class="fund-layout">
+        <div class="fund-main">
+          <p>
+            Đây là quỹ donate cố định do fanbase Skyward quản lý, dùng để thực hiện các
+            project support cho Sơn Tùng M-TP (event, streaming, banner, quà tặng, v.v...).
+          </p>
+          <p>
+            Mọi khoản thu – chi đều được cập nhật công khai dựa trên
+            <strong>link sao kê Cake</strong> và hiển thị realtime ở ô số dư bên cạnh.
+          </p>
+          <p class="fund-meta">
+            Xem chi tiết sao kê trực tiếp tại:
+            <a href="https://statement.cake.vn/view?encoded_id=318535339" target="_blank" style="color:#90caf9;">
+              Link sao kê quỹ Cake
+            </a>
+          </p>
+          <div class="fund-badge">
+            <span>📊</span>
+            <span>Số dư cập nhật từ Cake mỗi lần tải trang</span>
+          </div>
+        </div>
+
+        <div class="fund-card">
+          <div class="fund-amount">
+            <div>
+              <div class="fund-amount-label">Số dư quỹ hiện tại</div>
+              <div class="fund-amount-main" id="fundAmount">Đang tải...</div>
+            </div>
+          </div>
+          <div class="fund-updated" id="fundUpdated">
+            Đang lấy dữ liệu từ sao kê Cake...
+          </div>
+
+          <div class="fund-actions">
+            <button class="btn btn-primary" id="mainDonateBtn">
+              💙 Góp quỹ ngay
+            </button>
+            <button class="btn btn-ghost" id="refreshFundBtn">
+              🔄 Làm mới số dư
+            </button>
+          </div>
+          <small style="font-size: 11px; opacity:0.9;">
+            * Số liệu phụ thuộc vào dữ liệu Cake, nên hãy cập nhật sao kê đầy đủ.
+          </small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© Skyward fanbase – vì Sơn Tùng M-TP</span>
+    <span>Liên hệ quản lý quỹ: 0382227608/skyward4mtp@gmail.com</span>
+  </footer>
+
+  <!-- MODAL QR -->
+  <div class="modal-backdrop" id="qrModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Quét QR để góp quỹ</div>
+        <button class="modal-close" id="qrModalCloseBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Vui lòng mở app ngân hàng, chọn quét mã QR và chuyển khoản theo thông tin bên dưới.</p>
+
+        <div class="qr-wrapper">
+          <img src="qr-bank-skyward.png" alt="QR ngân hàng quỹ Skyward" />
+          <div class="qr-bank-info">
+            <div><strong>Ngân hàng:</strong> Cake by VPBank</div>
+            <div><strong>Chủ TK:</strong> ĐỖ NGỌC HÂN</div>
+            <div><strong>Số TK:</strong> 63258321</div>
+            <div><strong>Nội dung:</strong> SKYWARD + tên</div>
+          </div>
+        </div>
+
+        <p style="font-size: 11px; color:#b0bec5; text-align:center;">
+          Sau khi giao dịch xuất hiện trên sao kê Cake, số dư quỹ ở đây sẽ tự cập nhật theo.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    console.log("Skyward script loaded");
+
+    // =========================
+    // CONFIG LẤY SỐ DƯ QUỸ
+    // =========================
+    const FUND_API_URL =
+      "https://gw.cake.vn/public/user-group-account/statement?encoded_id=318535339";
+
+    const fundAmountEl = document.getElementById("fundAmount");
+    const fundUpdatedEl = document.getElementById("fundUpdated");
+    const refreshFundBtn = document.getElementById("refreshFundBtn");
+
+    function syncFundToStats() {
+      const statFund = document.getElementById("statFund");
+      if (!statFund) return;
+
+      const t = (fundAmountEl?.textContent || "").trim();
+      if (!t || t === "Đang tải..." || t === "Không lấy được số dư") {
+        statFund.textContent = "--";
+        return;
+      }
+      statFund.textContent = t;
+    }
+
+    async function fetchFundBalance() {
+      try {
+        fundAmountEl.textContent = "Đang tải...";
+        fundUpdatedEl.textContent = "Đang lấy dữ liệu từ sao kê Cake...";
+
+        console.log("Bắt đầu fetch Cake:", FUND_API_URL);
+        const res = await fetch(FUND_API_URL, { cache: "no-store" });
+
+        console.log("Kết quả HTTP từ Cake:", res.status);
+
+        if (!res.ok) {
+          throw new Error("HTTP status " + res.status);
+        }
+
+        const data = await res.json();
+        console.log("Cake JSON:", data);
+
+        const payload = data && data.data ? data.data : data;
+
+        let balance = null;
+
+        if (payload && payload.balance != null) {
+          balance = Number(payload.balance);
+        } else if (payload && payload.group_info && payload.group_info.balance != null) {
+          balance = Number(payload.group_info.balance);
+        }
+
+        if (balance == null || Number.isNaN(balance)) {
+          throw new Error("Không tìm được trường balance trong JSON Cake");
+        }
+
+        const currency = "VND";
+        const now = new Date();
+
+        fundAmountEl.textContent = balance.toLocaleString("vi-VN") + " " + currency;
+        fundUpdatedEl.textContent = "Cập nhật lần cuối: " + now.toLocaleString("vi-VN");
+      } catch (error) {
+        console.error("Lỗi khi lấy số dư Cake:", error);
+        fundAmountEl.textContent = "Không lấy được số dư";
+        fundUpdatedEl.textContent = (error && error.message) || "Lỗi không xác định từ Cake.";
+      } finally {
+        syncFundToStats();
+      }
+    }
+
+    // =========================
+    // MODAL QR
+    // =========================
+    const qrModalBackdrop = document.getElementById("qrModalBackdrop");
+    const qrModalCloseBtn = document.getElementById("qrModalCloseBtn");
+    const navDonateBtn = document.getElementById("navDonateBtn");
+    const mainDonateBtn = document.getElementById("mainDonateBtn");
+
+    function openQrModal() { qrModalBackdrop.classList.add("show"); }
+    function closeQrModal() { qrModalBackdrop.classList.remove("show"); }
+
+    navDonateBtn.addEventListener("click", openQrModal);
+    mainDonateBtn.addEventListener("click", openQrModal);
+    qrModalCloseBtn.addEventListener("click", closeQrModal);
+    qrModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === qrModalBackdrop) closeQrModal();
+    });
+
+    // =========================
+    // HELPERS (text)
+    // =========================
+    function foldText(s) {
+  return (s || "")
+    // chuẩn hoá unicode (bắt cả kiểu dấu "à" tách rời)
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    // chuẩn hoá các ký tự đặc biệt hay gặp
+    .replace(/đ/g, "d").replace(/Đ/g, "d")
+    .toLowerCase()
+    .trim();
+}
+    // statusKey: active | completed | other
+    function normalizeStatus(raw) {
+  const t = foldText(raw);
+
+  // COMPLETED: "hoàn thành", "đã tổng kết", "kết thúc", ...
+  if (
+    /\bhoan\s*thanh\b/.test(t) ||
+    /\bda\s*tong\s*ket\b/.test(t) ||
+    /\btong\s*ket\b/.test(t) ||
+    /\bket\s*thuc\b/.test(t) ||
+    /\bcompleted\b/.test(t)
+  ) return "completed";
+
+  // ACTIVE: "đang thực hiện", "đang diễn ra", "đang ...", ...
+  if (
+    /\bdang\b/.test(t) ||
+    /\bin\s*progress\b/.test(t) ||
+    /\bongoing\b/.test(t)
+  ) return "active";
+
+  return "other";
+}
+
+    function deriveTypeFromChip(chipText) {
+      const t = foldText(chipText);
+      if (t.includes("stream") || t.includes("stationhead")) return "streaming";
+      if (t.includes("offline") || t.includes("event")) return "offline";
+      return "other";
+    }
+
+    function emojiForType(type) {
+      if (type === "streaming") return "🎧";
+      if (type === "offline") return "📍";
+      return "💙";
+    }
+
+    // =========================
+    // UI: Thumbnails + dataset(status/type)
+    // =========================
+    function buildThumbnailsAndMeta() {
+      const cards = document.querySelectorAll(".project-card");
+      cards.forEach((card) => {
+        // 1) type từ chip
+        const chipEl = card.querySelector(".project-chip");
+        const chipText = chipEl ? chipEl.textContent.trim() : "";
+        const type = deriveTypeFromChip(chipText);
+        card.dataset.type = type;
+
+        // 3) statusKey từ meta
+        const meta = card.querySelector(".project-meta");
+        if (meta) {
+          const spans = meta.querySelectorAll("span");
+          const rawStatus = (spans[1]?.textContent || "").replace("Trạng thái:", "").trim();
+          const statusKey = normalizeStatus(rawStatus);
+
+          // text hiển thị (chuẩn hoá cho đẹp)
+          let displayStatus = rawStatus;
+          if (statusKey === "active") displayStatus = "Đang thực hiện";
+          if (statusKey === "completed") displayStatus = "Hoàn thành";
+
+          if (spans[1]) spans[1].textContent = "Trạng thái: " + displayStatus;
+
+          // dataset lưu key kỹ thuật
+          card.dataset.status = statusKey;
+        } else {
+          card.dataset.status = "other";
+        }
+      });
+    }
+
+    // =========================
+    // UI: Highlight active projects
+    // =========================
+    function markActiveProjects() {
+      const cards = document.querySelectorAll(".project-card");
+      cards.forEach((card) => {
+        if ((card.dataset.status || "other") === "active") card.classList.add("is-active");
+        else card.classList.remove("is-active");
+      });
+    }
+
+    // =========================
+    // Tabs counts + Filters
+    // =========================
+    function countByFilter(cards) {
+      const counts = { all: 0, active: 0, completed: 0, offline: 0, streaming: 0 };
+
+      cards.forEach((card) => {
+        const status = card.dataset.status || "other";   // active|completed|other
+        const type = card.dataset.type || "other";       // offline|streaming|other
+
+        counts.all += 1;
+        if (status === "active") counts.active += 1;
+        if (status === "completed") counts.completed += 1;
+
+        if (type === "offline") counts.offline += 1;
+        if (type === "streaming") counts.streaming += 1;
+      });
+
+      return counts;
+    }
+
+    function setTabCounts(counts) {
+      document.querySelectorAll(".tab-count").forEach((el) => {
+        const key = el.getAttribute("data-count");
+        const v = counts[key] ?? 0;
+        el.textContent = `(${v})`;
+      });
+    }
+
+    function applyFilter(filterKey) {
+      const cards = Array.from(document.querySelectorAll(".project-card"));
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const status = card.dataset.status || "other";
+        const type = card.dataset.type || "other";
+        let ok = true;
+
+        if (filterKey === "active") ok = status === "active";
+        else if (filterKey === "completed") ok = status === "completed";
+        else if (filterKey === "offline") ok = type === "offline";
+        else if (filterKey === "streaming") ok = type === "streaming";
+
+        card.style.display = ok ? "" : "none";
+        if (ok) visible += 1;
+      });
+
+      const empty = document.getElementById("projectsEmpty");
+      if (empty) empty.style.display = visible === 0 ? "block" : "none";
+
+      // stats theo filter (đang hiển thị)
+      const shownCards = cards.filter(c => c.style.display !== "none");
+      const shownCounts = countByFilter(shownCards);
+      const totalEl = document.getElementById("statTotal");
+      const activeEl = document.getElementById("statActive");
+      if (totalEl) totalEl.textContent = shownCounts.all.toLocaleString("vi-VN");
+      if (activeEl) activeEl.textContent = shownCounts.active.toLocaleString("vi-VN");
+    }
+
+    function initProjectFilters() {
+      const tabs = document.querySelectorAll(".tab-btn");
+      if (!tabs.length) return;
+
+      tabs.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          tabs.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          applyFilter(btn.getAttribute("data-filter") || "all");
+        });
+      });
+    }
+
+    function initProjectsUX() {
+      buildThumbnailsAndMeta();
+      markActiveProjects();
+
+      const cards = Array.from(document.querySelectorAll(".project-card"));
+      const counts = countByFilter(cards);
+      setTabCounts(counts);
+
+      // initial stats (all)
+      const totalEl = document.getElementById("statTotal");
+      const activeEl = document.getElementById("statActive");
+      if (totalEl) totalEl.textContent = counts.all.toLocaleString("vi-VN");
+      if (activeEl) activeEl.textContent = counts.active.toLocaleString("vi-VN");
+      syncFundToStats();
+
+      initProjectFilters();
+      applyFilter("all");
+    }
+
+    // =========================
+    // INIT
+    // =========================
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("DOMContentLoaded, gọi fetchFundBalance()");
+      fetchFundBalance();
+      initProjectsUX();
+
+      // Tự động refresh số dư mỗi 2 phút (120.000 ms)
+      setInterval(() => {
+        console.log("Auto refresh fund balance (2 phút/lần)");
+        fetchFundBalance();
+      }, 120000);
+    });
+
+    refreshFundBtn.addEventListener("click", () => {
+      console.log("Bấm nút Làm mới số dư");
+      fetchFundBalance();
+    });
+  </script>
+
+</body>
+</html>

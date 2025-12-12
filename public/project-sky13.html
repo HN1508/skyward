@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <a href="index.html" class="btn-back">← Về trang chính</a>
+  <title>SKYWARD • Mừng sinh nhật 13 năm đại gia đình Sky</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background:#0a0f18; color:#e6ecf5; }
+    .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(10px); }
+    .chip { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
+    .divider { border-color: rgba(255,255,255,0.12); }
+    .card:hover { transform: translateY(-4px); transition: .2s; }
+    #popup { backdrop-filter: blur(6px); }
+    #popupContent { max-height: 90vh; overflow-y: auto; }
+  </style>
+</head>
+
+<body class="pb-16">
+  <!-- Header -->
+  <header class="max-w-5xl mx-auto px-6 pt-8">
+    <div class="flex items-center justify-between">
+      <a href="/" class="text-blue-300 font-bold tracking-wide">SKYWARD</a>
+      <div class="flex items-center space-x-2">
+        <span class="px-3 py-1 rounded-full text-xs chip">🎉 Birthday Project</span>
+        <span id="statusBadge"
+          class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500 bg-opacity-20 border border-green-400 text-green-200">
+          🟢 Đang diễn ra
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-6 pt-10 pb-8">
+    <div class="glass rounded-2xl p-8 md:p-10 shadow">
+      <p class="text-sm text-blue-200 opacity-90">SKYWARD PROJECT</p>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-blue-300 mt-2 leading-tight">
+        🎉 MỪNG SINH NHẬT 13 NĂM<br/>
+        ĐẠI GIA ĐÌNH SKY 🩵
+      </h1>
+
+      <p class="mt-4 opacity-90 leading-relaxed max-w-3xl">
+        Mười ba năm bên nhau là một hành trình đầy cảm xúc, tự hào và trưởng thành cùng Tùng.
+        Cảm ơn Sky vì luôn yêu thương, đồng hành và tạo nên một bầu trời thật văn minh, thật đẹp 🥺🩵
+      </p>
+
+      <p class="mt-3 opacity-85 max-w-3xl">
+        Nhân dịp đặc biệt này, Skyward cùng một <b>Skyboy giấu tên</b> xin gửi tặng đại gia đình
+        những món quà nhỏ nhưng đầy yêu thương 💙
+      </p>
+
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <a href="#support" class="px-5 py-3 rounded-xl chip hover:bg-blue-500 font-semibold text-center">
+          ⛅ Trợ giá Bé Mây
+        </a>
+        <a href="#minigame" class="px-5 py-3 rounded-xl chip hover:bg-opacity-10 font-semibold text-center">
+          🎮 Minigame Decor Skylight
+        </a>
+      </div>
+	  <!-- Countdown + Slots -->
+		<div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+		   <div class="chip rounded-xl p-4">
+			<div class="text-sm opacity-75">⛅ Slot trợ giá còn lại</div>
+			<div class="text-2xl font-extrabold mt-1"><span id="slotsRemaining">--</span>/60</div>
+			<button onclick="fetchSlotsRemainingFromSheet()" class="mt-2 w-full px-4 py-2 rounded-xl chip hover:bg-opacity-10 font-semibold">
+			  🔄 Làm mới slot
+			</button>
+		
+		  </div>
+		  <div class="chip rounded-xl p-4">
+			<div class="text-sm opacity-75">⏳ Countdown Minigame</div>
+			<div id="countdownText" class="text-lg font-bold mt-1">Đang tải...</div>
+			<div class="text-xs opacity-70 mt-1">Mốc: 25/12/2025 23:59</div>
+		  </div>
+
+		  <div class="chip rounded-xl p-4">
+			<div class="text-sm opacity-75">📣 Kết quả minigame decor</div>
+			<button onclick="openResults()" class="mt-2 w-full px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+			  Xem / Công bố kết quả
+			</button>
+			<div class="text-xs opacity-70 mt-1">Top 5 (ảnh) • Top 10 • Lucky numbers</div>
+		  </div>
+		</div>
+
+    </div>
+  </section>
+
+  <hr class="divider my-8 max-w-5xl mx-auto"/>
+
+  <!-- Trợ giá -->
+  <section class="max-w-5xl mx-auto px-6 pb-10" id="support">
+    <h2 class="text-2xl font-bold text-blue-300">⛅ Trợ giá Skylight – Bé Mây</h2>
+
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="glass rounded-2xl p-6">
+        <div class="text-sm opacity-75">Số lượng</div>
+        <div class="text-2xl font-bold mt-1">🎁 60 slots</div>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <div class="text-sm opacity-75">Mức trợ giá</div>
+        <div class="text-2xl font-bold mt-1">💸 200.000đ / slot</div>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <div class="text-sm opacity-75">Thời gian</div>
+        <div class="text-2xl font-bold mt-1">🗓️ 25/11 → hết slot</div>
+      </div>
+    </div>
+
+    <div class="mt-6 glass rounded-2xl p-6">
+      <h3 class="font-bold text-blue-200 mb-2">🎉 Điều kiện nhận trợ giá</h3>
+      <ul class="space-y-2 opacity-90">
+        <li>1️⃣ Là Sky</li>
+        <li>2️⃣ Có email xác nhận mua bé Mây từ <b>25/11/2025</b></li>
+        <li>3️⃣ Ưu tiên Sky stream trên Stationhead & các nền tảng khác</li>
+      </ul>
+
+      <p class="mt-4 opacity-85">
+        📩 Sky nào muốn nhận trợ giá hãy <b>inbox Skyward</b> để được hướng dẫn chi tiết hơn nha 😉  
+        Project này là sự kết hợp của Skyward và một Skyboy bí ẩn đẹp trai đó nha 🫣
+      </p>
+	  <div class="mt-4 flex flex-col sm:flex-row gap-3">
+  <a
+    href="https://www.facebook.com/share/p/14UGT9By96r/"
+    target="_blank"
+    class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-center"
+  >
+    📩 Liên hệ / Xem bài trợ giá
+  </a>
+</div>
+
+    </div>
+  </section>
+
+  <hr class="divider my-8 max-w-5xl mx-auto"/>
+
+  <!-- Minigame -->
+  <section class="max-w-5xl mx-auto px-6 pb-10" id="minigame">
+    <h2 class="text-2xl font-bold text-blue-300">🎮 Minigame Decor Skylight – Bé Mây điệu đà</h2>
+
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="glass rounded-2xl p-6">
+        <h3 class="font-bold text-blue-200 mb-2">🩵 Cách tham gia</h3>
+        <ol class="list-decimal list-inside space-y-2 opacity-90">
+          <li>Trang trí Skylight (bé Mây) thật xinh đẹp</li>
+          <li>Chia sẻ bài viết ở chế độ công khai</li>
+          <li>
+            Comment dưới bài:
+            <ul class="list-disc list-inside ml-4">
+              <li>Ảnh Skylight của bạn</li>
+              <li>1 số may mắn từ 1 → 10000</li>
+            </ul>
+          </li>
+        </ol>
+
+        <p class="mt-3 text-sm opacity-80">
+          ✨ Sky có tài khoản Stationhead được cộng thêm 1 số may mắn / acc
+        </p>
+		<div class="mt-4 flex flex-col sm:flex-row gap-3">
+  <a
+    href="https://www.facebook.com/share/p/17kPXPVj2B/"
+    target="_blank"
+    class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-center"
+  >
+    🔗 Mở bài Minigame Decor Skylight
+  </a>
+</div>
+
+      </div>
+
+      <div class="glass rounded-2xl p-6">
+        <h3 class="font-bold text-blue-200 mb-2">🏆 Phần thưởng</h3>
+        <ul class="space-y-2 opacity-90">
+          <li>🥇 5 sets <b>CAPY</b> – Skyward chọn</li>
+          <li>🥈 10 sets <b>CHIKO</b> – vote cao nhất</li>
+          <li>🥉 20 sets <b>TOMI</b> – quay số may mắn</li>
+        </ul>
+
+        <p class="mt-3 text-sm opacity-80">
+          Quà sẽ được hé lộ dần – đảm bảo không làm Sky thất vọng 🩵
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-6 glass rounded-2xl p-6">
+      <p class="opacity-90">
+        ⏰ <b>Thời gian:</b> từ <b>25/11/2025 – 25/12/2025</b>  
+        Minigame kéo dài 1 tháng nên Sky chưa có Skylight vẫn kịp tham gia nha 🩵
+      </p>
+    </div>
+  </section>
+
+  <!-- Lưu ý -->
+  <section class="max-w-5xl mx-auto px-6 pb-12">
+    <div class="glass rounded-2xl p-6">
+      <h3 class="font-bold text-blue-200 mb-2">‼️ Lưu ý</h3>
+      <p class="opacity-90 leading-relaxed">
+        Team <b>không chấp nhận ảnh AI</b> và mọi hình thức buff, mua like ảo.
+        Skyward có quyền kiểm tra bất cứ lúc nào; nếu phát hiện gian lận sẽ hủy kết quả ngay lập tức.
+      </p>
+    </div>
+  </section>
+<a href="index.html" class="btn-back">← Về trang chính</a>
+  <footer class="max-w-5xl mx-auto px-6 pt-8 text-center text-xs opacity-60">
+    🎂 Chúc đại gia đình Sky tuổi 13 thật rực rỡ • From Skyward & Sky with love 🩵
+  </footer>
+  <!-- Results Popup -->
+<div id="resultsPopup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6">
+  <div id="resultsContent" class="max-w-4xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-700"></div>
+</div>
+<script>
+  // =========================
+  // CONFIG
+  // =========================
+  const END_STAGE2 = new Date("2025-12-25T23:59:00+07:00"); // kết thúc minigame decor
+  const SUPPORT_START = new Date("2025-11-25T00:00:00+07:00"); // trợ giá mở từ 25/11
+  const SLOTS_TOTAL = 60;
+
+  // localStorage keys
+  const LS_USED = "skyward_sky13_used_slots_v1";
+
+  // =========================
+  // BADGE AUTO: Đang diễn ra -> Đã kết thúc
+  // =========================
+  (function setStatusBadge() {
+    const badge = document.getElementById("statusBadge");
+    if (!badge) return;
+
+    const now = new Date();
+    if (now <= END_STAGE2) {
+      badge.textContent = "🟢 Đang diễn ra";
+      badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-green-500 bg-opacity-20 border border-green-400 text-green-200";
+    } else {
+      badge.textContent = "✅ Đã kết thúc";
+      badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-blue-500 bg-opacity-20 border border-blue-400 text-blue-200";
+    }
+  })();
+
+  // =========================
+  // COUNTDOWN tới 25/12
+  // =========================
+  function formatCountdown(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const days = Math.floor(s / 86400);
+    const hours = Math.floor((s % 86400) / 3600);
+    const mins = Math.floor((s % 3600) / 60);
+    const secs = s % 60;
+    return `${days}d ${hours}h ${mins}m ${secs}s`;
+  }
+
+  function tickCountdown() {
+    const el = document.getElementById("countdownText");
+    if (!el) return;
+
+    const now = new Date();
+    const diff = END_STAGE2.getTime() - now.getTime();
+
+    if (diff > 0) {
+      el.textContent = formatCountdown(diff);
+    } else {
+      el.textContent = "Đã kết thúc 🎉";
+    }
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+// =========================
+// SLOTS COUNTER (Google Sheet B1 realtime via CSV)
+// =========================
+const SLOTS_SHEET_CSV =
+  "https://docs.google.com/spreadsheets/d/1Je490lKmXaiq0JEjGU_4r8jf-OI_8R-VBNLtrSy3QJg/export?format=csv&gid=0";
+
+async function fetchSlotsRemainingFromSheet() {
+  const el = document.getElementById("slotsRemaining");
+  if (!el) return;
+
+  try {
+    el.textContent = "...";
+
+    const res = await fetch(SLOTS_SHEET_CSV, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    const csv = await res.text();
+
+    // Hàng 1 (row 1), cột B (index 1) = ô B1
+    const lines = csv.trim().split(/\r?\n/);
+    const row1 = lines[0] ? lines[0].split(",") : [];
+    const b1Raw = (row1[1] || "").replace(/"/g, "").trim();
+
+    // Chỉ lấy số (phòng khi có "10 slots"…)
+    const n = Number(String(b1Raw).replace(/[^\d]/g, ""));
+    if (Number.isNaN(n)) throw new Error("B1 không phải số: " + b1Raw);
+
+    el.textContent = String(n);
+  } catch (e) {
+    console.error("Fetch slot từ Google Sheet lỗi:", e);
+    el.textContent = "--";
+  }
+}
+
+// gọi ngay + tự động mỗi 2 phút
+fetchSlotsRemainingFromSheet();
+setInterval(fetchSlotsRemainingFromSheet, 120000);
+
+  // =========================
+  // RESULTS POPUP (placeholder)
+  // =========================
+  const resultsData = {
+    // Top 5 CAPY: có ảnh
+    top5: [
+      // { name: "Sky #1", image: "images/top5_1.jpg", note: "Decor vibe: ..." },
+      // { name: "Sky #2", image: "images/top5_2.jpg", note: "..." },
+    ],
+
+    // Top 10 CHIKO: hiển thị list (10 người)
+    top10: [
+      // "Sky #6", "Sky #7", ...
+    ],
+
+    // Lucky numbers TOMI: hiển thị danh sách (số + tên)
+    lucky: [
+      // { number: 777, name: "Sky A" },
+      // { number: 1300, name: "Sky B" },
+    ],
+
+    // Link bài công bố (nếu có)
+    postUrl: "#"
+  };
+
+  function openResults() {
+    const popup = document.getElementById("resultsPopup");
+    const content = document.getElementById("resultsContent");
+    if (!popup || !content) return;
+
+    const top5Html = (resultsData.top5 && resultsData.top5.length)
+      ? `
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+          ${resultsData.top5.map((x, i) => `
+            <div class="rounded-2xl border border-gray-700 overflow-hidden bg-gray-800 bg-opacity-30">
+              <div class="p-4 flex items-center justify-between">
+                <div class="font-bold text-blue-200">🥇 Top ${i+1}</div>
+                <div class="text-xs opacity-70">CAPY</div>
+              </div>
+              <div class="border-t border-gray-700">
+                <img src="${x.image}" alt="${x.name}" class="w-full object-cover max-h-56">
+              </div>
+              <div class="p-4">
+                <div class="font-semibold">${x.name}</div>
+                ${x.note ? `<div class="text-sm opacity-80 mt-1">${x.note}</div>` : ``}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `
+      : `<div class="mt-3 text-sm opacity-80">Chưa công bố Top 5 (CAPY) 🫣</div>`;
+
+    const top10Html = (resultsData.top10 && resultsData.top10.length)
+      ? `
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+          ${resultsData.top10.map((name, idx) => `
+            <div class="px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 bg-opacity-20">
+              🧢 #${idx+1} • ${name}
+            </div>
+          `).join("")}
+        </div>
+      `
+      : `<div class="mt-3 text-sm opacity-80">Chưa công bố Top 10 (CHIKO) 🫣</div>`;
+
+    const luckyHtml = (resultsData.lucky && resultsData.lucky.length)
+      ? `
+        <div class="mt-3 space-y-2 text-sm">
+          ${resultsData.lucky.map((x) => `
+            <div class="px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 bg-opacity-20">
+              🎲 <b>${x.number}</b> — ${x.name}
+            </div>
+          `).join("")}
+        </div>
+      `
+      : `<div class="mt-3 text-sm opacity-80">Chưa công bố danh sách số may mắn (TOMI) 🫣</div>`;
+
+    content.innerHTML = `
+      <div class="space-y-5">
+        <button onclick="closeResults()" class="float-right text-sm px-3 py-1 bg-gray-800 rounded-full hover:bg-gray-700">✕ Đóng</button>
+
+        <h2 class="text-2xl font-bold text-blue-300">📣 Kết quả Minigame Decor Skylight</h2>
+        <p class="text-sm opacity-80">
+          Công bố theo 3 hạng mục: <b>Top 5 CAPY</b> (Skyward chọn) • <b>Top 10 CHIKO</b> (vote) • <b>TOMI</b> (lucky numbers).
+        </p>
+
+        <div class="rounded-2xl border border-gray-700 p-5 bg-gray-800 bg-opacity-20">
+          <div class="font-bold text-blue-200">🥇 Top 5 — CAPY (ảnh)</div>
+          ${top5Html}
+        </div>
+
+        <div class="rounded-2xl border border-gray-700 p-5 bg-gray-800 bg-opacity-20">
+          <div class="font-bold text-blue-200">🥈 Top 10 — CHIKO (vote)</div>
+          ${top10Html}
+        </div>
+
+        <div class="rounded-2xl border border-gray-700 p-5 bg-gray-800 bg-opacity-20">
+          <div class="font-bold text-blue-200">🥉 TOMI — Danh sách số may mắn</div>
+          ${luckyHtml}
+        </div>
+
+        ${resultsData.postUrl && resultsData.postUrl !== "https://web.facebook.com/photo.php?fbid=122145826178898791&set=pb.61576963754129.-2207520000&type=3"
+          ? `<a href="${resultsData.postUrl}" target="_blank"
+               class="inline-flex items-center px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-sm">
+               🔗 Mở bài công bố
+             </a>`
+          : `<div class="text-xs opacity-60">🔗 Link bài công bố: (bạn dán vào resultsData.postUrl)</div>`
+        }
+
+        <div class="text-xs opacity-60">Team không chấp nhận ảnh AI & buff like ảo. Nếu phát hiện gian lận sẽ hủy kết quả.</div>
+      </div>
+    `;
+
+    popup.classList.remove("hidden");
+  }
+
+  function closeResults() {
+    document.getElementById("resultsPopup").classList.add("hidden");
+  }
+</script>
+
+</body>
+</html>

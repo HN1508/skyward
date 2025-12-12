@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<a href="index.html" class="btn-back">← Về trang chính</a>
+<title>SKYWARD • Dự án sinh nhật Sơn Tùng M-TP</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<style>
+    body {
+        background: #0a0f18;
+        color: #e6ecf5;
+        font-family: 'Inter', sans-serif;
+    }
+    .section-title {
+        @apply text-3xl font-bold mb-4 text-blue-300;
+    }
+    .stage-card:hover {
+        transform: translateY(-4px);
+        transition: 0.2s;
+    }
+</style>
+<style>
+  #popup {
+    backdrop-filter: blur(6px);
+  }
+  #popupContent {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .prose ul { margin-top: 0.5rem; }
+</style>
+
+</head>
+
+<body class="pb-20">
+
+<!-- ================= HERO ================ -->
+<section class="text-center py-16 px-6">
+    <h1 class="text-4xl font-bold text-blue-300 mb-4">SKYWARD • DỰ ÁN RA MẮT</h1>
+    <p class="text-lg opacity-80 max-w-2xl mx-auto leading-relaxed">
+        "Skyward" – nghĩa là hướng về bầu trời.  
+        Là ánh nhìn không bao giờ rời khỏi một vì sao.  
+        Là trái tim không ngừng rung động trước người nghệ sĩ mang tên <b>Sơn Tùng M-TP</b>.
+        <br><br>
+        Nhân dịp sinh nhật Tùng, Skyward gửi đến mọi người món quà chào sân:  
+        <b>Chuỗi 6 project sinh nhật</b>, được ấp ủ với tất cả yêu thương và tự hào của những người mang tên Sky.
+    </p>
+</section>
+
+<hr class="border-gray-700 my-10 w-2/3 mx-auto">
+
+<!-- =============== STAGE LIST =============== -->
+<section class="px-6 max-w-4xl mx-auto">
+    <h2 class="section-title">6 Chặng Dự Án</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Stage 1 -->
+        <div class="stage-card p-5 rounded-xl bg-gray-800 bg-opacity-40 shadow">
+            <h3 class="text-xl font-bold text-blue-200">STAGE 1 • Stationhead Give Away</h3>
+            <p class="opacity-80 mt-2">Minigame dành cho các Sky hoạt động trên Sky Stationhead: tổng 60 phần quà chia theo 2 hạng mục “Niềm Kiêu Hãnh” & “SKY”.</p>
+            <button onclick="openStage(1)" class="mt-3 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500">Xem chi tiết</button>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="stage-card p-5 rounded-xl bg-gray-800 bg-opacity-40 shadow">
+            <h3 class="text-xl font-bold text-blue-200">STAGE 2 • Mega LED Hà Nội</h3>
+            <p class="opacity-80 mt-2">LED chúc mừng sinh nhật Tùng chạy 3 ngày tại Lotte Mall Tây Hồ với nhiều phần quà check-in hấp dẫn.</p>
+            <button onclick="openStage(2)" class="mt-3 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500">Xem chi tiết</button>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="stage-card p-5 rounded-xl bg-gray-800 bg-opacity-40 shadow">
+            <h3 class="text-xl font-bold text-blue-200">STAGE 3 • LED 2 mặt TP.HCM</h3>
+            <p class="opacity-80 mt-2">LED sinh nhật tại trung tâm Quận 1 – Phạm Ngọc Thạch. Quà tặng cho các Sky đến check-in.</p>
+            <button onclick="openStage(3)" class="mt-3 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500">Xem chi tiết</button>
+        </div>
+
+        <!-- Stage 4 -->
+        <div class="stage-card p-5 rounded-xl bg-gray-800 bg-opacity-40 shadow">
+            <h3 class="text-xl font-bold text-blue-200">STAGE 4 • Bánh sinh nhật thiết kế riêng</h3>
+            <p class="opacity-80 mt-2">Chiếc bánh cảm hứng từ Hoàng Tử Bé – biểu tượng ước mơ, yêu thương và hành trình của Tùng.</p>
+            <button onclick="openStage(4)" class="mt-3 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500">Xem chi tiết</button>
+        </div>
+
+        <!-- Stage 5 -->
+        <div class="stage-card p-5 rounded-xl bg-gray-800 bg-opacity-40 shadow">
+            <h3 class="text-xl font-bold text-blue-200">STAGE 5 • SKYWARD × Support Teams</h3>
+            <p class="opacity-80 mt-2">Hộp quà sinh nhật gửi tặng Sơn Tùng M-TP – gom góp từ Skyward và những người bạn yêu thương.</p>
+            <button onclick="openStage(5)" class="mt-3 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500">Xem chi tiết</button>
+        </div>
+
+        <!-- Stage 6 -->
+        <div class="stage-card p-5 rounded-xl bg-gray-800 bg-opacity-40 shadow">
+            <h3 class="text-xl font-bold text-blue-200">STAGE 6 • Quà tặng staff M-TP</h3>
+            <p class="opacity-80 mt-2">Một set trà chiều ấm áp gửi đến các cộng sự thầm lặng phía sau ánh đèn sân khấu.</p>
+            <button onclick="openStage(6)" class="mt-3 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500">Xem chi tiết</button>
+        </div>
+
+    </div>
+</section>
+<a href="index.html" class="btn-back">← Về trang chính</a>
+<!-- POPUP DETAIL -->
+<div id="popup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6 overflow-y-auto">
+    <div id="popupContent" class="max-w-3xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl"></div>
+</div>
+
+<script>
+const stageData = {
+  1: {
+    title: "STAGE 1 • SKY STATIONHEAD GIVE AWAY",
+    subtitle: "Minigame dành riêng cho các Sky hoạt động trên Sky Stationhead",
+    image: "images/pr1/stage1.jpg", 
+    linkLabel: "Xem bài / điền form",
+    linkUrl: "https://forms.gle/8ur9UkjqsaF6FNz16",
+    html: `
+      <p>🎧 <b>SKYWARD: DỰ ÁN RA MẮT | STAGE 1 | SKY STATIONHEAD GIVE AWAY</b></p>
+      <p class="mt-3">
+        Với mục đích khuyến khích thêm thật nhiều Sky mở tài khoản Stationhead, và tri ân những bạn ngày đêm ăn ngủ trong phòng stream,
+        Skyward gửi đến bạn minigame đầu tiên trong chuỗi dự án ra mắt page.
+      </p>
+      <p class="mt-3">🌥️ <b>Số lượng quà:</b> 60 sets</p>
+      <ul class="mt-2 list-disc list-inside space-y-1">
+        <li>💙 <b>30 sets “Niềm Kiêu Hãnh”</b> – dành cho top 30 bạn có tổng lượng stream Sky Stationhead cao nhất.</li>
+        <li>🤍 <b>30 sets “SKY”</b> – quay số ngẫu nhiên từ các bạn có tài khoản Stationhead, điểm danh ≥ 5 ngày.</li>
+      </ul>
+
+      <p class="mt-4 font-semibold">📜 Thể lệ “Niềm Kiêu Hãnh”</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Điền form thông tin tài khoản Stationhead.</li>
+        <li>Team sẽ kiểm tra và lọc ra 30 tài khoản có tổng stream cao nhất (có thể cộng dồn nhiều acc).</li>
+        <li>Share bài viết minigame ở chế độ <b>công khai</b>.</li>
+      </ul>
+
+      <p class="mt-4 font-semibold">🎲 Thể lệ “SKY”</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Like/Follow SKYWARD trên Facebook/Instagram/Threads.</li>
+        <li>Comment ảnh account Stationhead có chuỗi lửa ≥ 5 ngày + 1 số random dưới post.</li>
+        <li>Share bài viết ở chế độ công khai – team random chọn 30 bạn.</li>
+      </ul>
+
+      <p class="mt-4 text-sm opacity-80">
+        ‼️ Quà được ship online, Sky tự thanh toán phí ship (khoảng 11k–20k tuỳ khu vực). Số liệu stream & chuỗi lửa được chốt lúc
+        <b>23h59 ngày 6/7/2025</b>.
+      </p>
+    `
+  },
+
+  2: {
+    title: "STAGE 2 • MEGA LED LOTTE MALL TÂY HỒ – HÀ NỘI",
+    subtitle: "Màn mega LED mừng sinh nhật tại Lotte Mall Tây Hồ",
+    image: "images/pr1/stage2.jpg",
+    linkLabel: "Link sự kiện Facebook",
+    linkUrl: "https://www.facebook.com/share/1YGi7A6M1U/?mibextid=wwXIfr",
+    html: `
+      <p>🎂 <b>SKYWARD: STAGE 2 | MEGA LED TẠI LOTTE MALL TÂY HỒ – HÀ NỘI</b></p>
+      <p class="mt-3">
+        Một màn mega LED chúc mừng sinh nhật Sơn Tùng M-TP chạy liên tục 3 ngày tại Lotte Mall Tây Hồ.
+        Không chỉ dành cho Sky, đây còn là cách để lan toả niềm vui đến bất kỳ ai vô tình đi ngang qua.
+      </p>
+
+      <p class="mt-3 font-semibold">🌥️ Thông tin chi tiết</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>⏱️ Thời gian: 10h – 22h, ngày <b>4–6/7/2025</b>.</li>
+        <li>🔁 Tần suất: <b>6 phút / lần</b>.</li>
+        <li>📍 Địa điểm: Mega LED tầng 4, Lotte Mall Tây Hồ, 683 Lạc Long Quân, Tây Hồ, Hà Nội.</li>
+      </ul>
+
+      <p class="mt-4 font-semibold">🎁 Quà tặng check-in</p>
+      <p class="mt-1">Check-in LED, đăng bài & tag SKYWARD + Sơn Tùng M-TP để nhận quà:</p>
+      <ul class="list-disc list-inside space-y-1 mt-1">
+        <li>✨ <b>SET HÔM MÊ</b> – 30 bạn đến sớm nhất (10 bạn/ngày × 3 ngày).</li>
+        <li>✨ <b>SET CAPY</b> – 45 bạn check-in tiếp theo.</li>
+        <li>✨ <b>SET CHIKOTOMI</b> – 100 set cho những bạn đến sau.</li>
+      </ul>
+
+      <p class="mt-3 text-sm opacity-80">
+        ‼️ Thời gian tính “đến sớm” dựa trên mốc đăng bài trên mạng xã hội. Địa điểm phát quà được cập nhật trên story SKYWARD mỗi ngày.
+      </p>
+    `
+  },
+
+  3: {
+    title: "STAGE 3 • LED 2 MẶT PHẠM NGỌC THẠCH – TP.HCM",
+    subtitle: "LED sinh nhật tại trung tâm quận 1 cho Sky Sài Gòn",
+    image: "images/pr1/stage3.jpg",
+    linkLabel: "Link sự kiện Facebook",
+    linkUrl: "https://www.facebook.com/share/19LWbVbpXU/?mibextid=wwXIfr",
+    html: `
+      <p>💨 <b>SKYWARD: STAGE 3 | LED 2 MẶT TẠI PHẠM NGỌC THẠCH – TP.HCM</b></p>
+      <p class="mt-3">
+        Màn LED 2 mặt tại trung tâm Quận 1, dành riêng cho các “hôm mê” Sài Gòn, tiếp tục lan toả không khí sinh nhật Sơn Tùng M-TP.
+      </p>
+
+      <p class="mt-3 font-semibold">✍️ Thông tin chi tiết</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>⏱️ Thời gian: <b>8h – 22h, ngày 5/7/2025</b>.</li>
+        <li>🔁 Tần suất: <b>7 phút / lần</b>.</li>
+        <li>📍 Địa điểm: Số 4A Phạm Ngọc Thạch, phường Bến Nghé, Quận 1, TP.HCM.</li>
+      </ul>
+
+      <p class="mt-4 font-semibold">🎁 Quà tặng check-in</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>💙 <b>SET HÔM MÊ</b> – 20 bạn đăng bài check-in sớm nhất.</li>
+        <li>🤍 <b>SET CAPY</b> – 25 bạn đăng bài tiếp theo.</li>
+      </ul>
+
+      <p class="mt-3 text-sm opacity-80">
+        🛵 Quà được ship tận nhà (11k–20k tuỳ khu vực).  
+        Sau khi đăng bài theo thể lệ, Sky chụp màn hình và inbox cho SKYWARD để được hướng dẫn điền form.
+      </p>
+    `
+  },
+
+  4: {
+    title: "STAGE 4 • BÁNH SINH NHẬT THIẾT KẾ RIÊNG",
+    subtitle: "Chiếc bánh Hoàng Tử Bé – câu chuyện bằng đường kem và ký ức",
+    image: "images/pr1/stage4.jpg",
+    linkLabel: "Xem album bánh sinh nhật",
+    linkUrl: "#", // TODO: thay bằng link album khi có
+    html: `
+      <p>🎂 <b>STAGE 4: BÁNH SINH NHẬT THIẾT KẾ RIÊNG MỪNG SƠN TÙNG M-TP</b></p>
+      <p class="mt-3">
+        Lấy cảm hứng từ Hoàng tử bé, chiếc bánh sinh nhật được thiết kế như một lâu đài cổ tích thu nhỏ,
+        kiêu hãnh vươn mình giữa những nốt nhạc mềm mại – tựa giai điệu lan tỏa từ trái tim người nghệ sĩ.
+      </p>
+      <ul class="mt-3 list-disc list-inside space-y-1">
+        <li>Hai bé Chiko & Tomi xuất hiện cạnh lâu đài – như đôi bạn nhỏ đồng hành đáng yêu.</li>
+        <li>Tông xanh da trời – màu của Sky – ôm trọn ước mơ, hy vọng & tình cảm fandom dành cho Tùng.</li>
+        <li>Các khung ảnh nhỏ dưới chân bánh như từng mảnh ký ức lung linh của hành trình âm nhạc.</li>
+      </ul>
+      <p class="mt-3 text-sm opacity-80">
+        Mỗi chi tiết trên chiếc bánh là một lời chúc, một lời cảm ơn dành cho “vị vua của bầu trời”.
+      </p>
+    `
+  },
+
+  5: {
+    title: "STAGE 5 • QUÀ TẶNG SINH NHẬT GỬI TỚI SƠN TÙNG M-TP",
+    subtitle: "SKYWARD × Thiếu Niên Phi Công × Support Team",
+    image: "images/pr1/stage5.jpg",
+    linkLabel: "Xem chi tiết project",
+    linkUrl: "#", // TODO: link post collab
+    html: `
+      <p>🩵 <b>STAGE 5: QUÀ TẶNG SINH NHẬT SƠN TÙNG M-TP</b></p>
+      <p class="mt-3">
+        Ở chặng số 5, Skyward không đi một mình. Đồng hành là các supporter và bạn <b>@ypilotsbietbay</b>,
+        cùng nhau chuẩn bị những món quà xinh xắn – từ đồ lưu niệm, đồ handmade đến thư tay đầy ắp tình cảm.
+      </p>
+      <p class="mt-3">
+        💌 <b>30 hộp quà</b> lớn nhỏ được chọn lựa tỉ mỉ để phù hợp với sở thích và tính cách của Tùng,
+        trở thành “kho báu nhỏ” chứa đầy yêu thương của Sky.
+      </p>
+      <p class="mt-3 text-sm opacity-80">
+        Chặng này là nơi tình yêu của Sky được gửi gắm trọn vẹn nhất – nhẹ nhàng, tinh tế nhưng đong đầy tự hào.
+      </p>
+    `
+  },
+
+  6: {
+    title: "STAGE 6 • MÓN QUÀ NHỎ GỬI TỚI STAFF M-TP",
+    subtitle: "Trà chiều ấm áp dành cho những người cộng sự thầm lặng",
+    image: "images/pr1/stage6.jpg",
+    linkLabel: "Xem album hậu trường",
+    linkUrl: "#", // TODO: link album staff
+    html: `
+      <p>🩵 <b>STAGE 6: MÓN QUÀ NHỎ GỬI TẶNG STAFF M-TP</b></p>
+      <p class="mt-3">
+        “Vì phía sau một nghệ sĩ tỏa sáng luôn có những con người tuyệt vời chẳng ngại lặng thầm…”
+        Skyward chuẩn bị một set trà chiều gồm bánh thiết kế riêng, thức uống dịu ngọt và những món quà nhỏ xinh,
+        gửi tới tập thể staff M-TP Entertainment.
+      </p>
+      <ul class="mt-3 list-disc list-inside space-y-1">
+        <li>Như một lời cảm ơn những người luôn đứng sau ánh đèn sân khấu.</li>
+        <li>Mong rằng chút ngọt ngào này sẽ tiếp thêm năng lượng cho hành trình phía trước.</li>
+      </ul>
+      <p class="mt-3 text-sm opacity-80">
+        Hy vọng món quà nhỏ sẽ thay Sky gửi lời yêu thương tới những người đang âm thầm nỗ lực mỗi ngày vì âm nhạc của Tùng.
+      </p>
+    `
+  }
+};
+
+function openStage(id) {
+  const p = document.getElementById("popup");
+  const c = document.getElementById("popupContent");
+  const s = stageData[id];
+
+  c.innerHTML = `
+    <div class="space-y-4">
+      <button onclick="closeStage()" class="float-right text-sm px-3 py-1 bg-gray-800 rounded-full hover:bg-gray-700">✕ Đóng</button>
+
+      <h2 class="text-2xl font-bold text-blue-300 mb-1">${s.title}</h2>
+      <p class="text-sm opacity-80 mb-3">${s.subtitle || ""}</p>
+
+      ${s.image ? `
+        <div class="rounded-2xl overflow-hidden border border-gray-700">
+          <img src="${s.image}" alt="${s.title}" class="w-full object-cover max-h-72">
+        </div>
+      ` : ""}
+
+      <div class="prose prose-sm prose-invert max-w-none leading-relaxed">
+        ${s.html}
+      </div>
+
+      ${s.linkUrl && s.linkUrl !== "#" ? `
+        <a href="${s.linkUrl}" target="_blank"
+           class="inline-flex items-center mt-4 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold">
+          🔗 ${s.linkLabel || "Xem chi tiết"}
+        </a>
+      ` : ""}
+
+      <div class="pt-4 text-xs opacity-60">
+        Vì bầu trời, từ bầu trời – SKYWARD.
+      </div>
+    </div>
+  `;
+
+  p.classList.remove("hidden");
+}
+
+
+function closeStage() {
+    document.getElementById("popup").classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
