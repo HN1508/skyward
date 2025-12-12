@@ -117,7 +117,4 @@ app.get("/api/fund-balance", async (req, res) => {
     });
   }
 });
-
-app.listen(PORT, () => {
-  console.log(`Server đang chạy tại http://localhost:${PORT}`);
 });
