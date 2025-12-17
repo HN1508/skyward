@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SKYWARD • Project </title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    body { background:#0a0f18; color:#e6ecf5; }
+    .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(10px); }
+    .chip { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
+    .divider { border-color: rgba(255,255,255,0.12); }
+    .btn-primary { background:#2563eb; }
+    .btn-primary:hover { background:#3b82f6; }
+    .btn-outline { border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); }
+    .btn-outline:hover { background: rgba(255,255,255,0.06); }
+
+    /* =========================
+       ✅ BACK BUTTON (đẹp như mẫu)
+       ========================= */
+    .btn-back{
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 60;
+
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: rgba(226,232,240,.96);
+
+      font-weight: 900;
+      letter-spacing: .2px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.35);
+
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-back:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(147,197,253,.55);
+      filter: brightness(1.04);
+    }
+    .btn-back:active{ transform: translateY(0); }
+
+    .btn-back .icon{
+      width: 34px;
+      height: 34px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 999px;
+
+      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.40), rgba(59,130,246,.12));
+      border: 1px solid rgba(59,130,246,.35);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    @media (max-width: 640px){
+      .btn-back{
+        top: 14px;
+        left: 14px;
+        padding: 9px 12px;
+      }
+      .btn-back .icon{ width: 32px; height: 32px; }
+    }
+  </style>
+</head>
+
+<body class="pb-16">
+
+  <!-- ✅ Nút về trang chính (đặt đúng trong body) -->
+  <a href="index.html" class="btn-back" aria-label="Về trang chính">
+    <span class="icon">←</span>
+    <span>Về trang chính</span>
+  </a>
+
+  <!-- Header -->
+  <header class="max-w-5xl mx-auto px-6 pt-8">
+    <div class="flex items-center justify-between">
+      <a href="/" class="text-blue-300 font-bold tracking-wide">SKY WARD</a>
+      <span id="donateStatusBadge" class="px-3 py-1 rounded-full text-xs font-semibold"></span>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-6 pt-10 pb-8">
+    <div class="glass rounded-2xl p-8 md:p-10 shadow">
+      <p class="text-sm text-blue-200 opacity-90">PROJECT SUPPORT</p>
+
+      <h1 class="text-3xl md:text-4xl font-extrabold text-blue-300 mt-2 leading-tight">
+        ⛅️ SUPPORT SƠN TÙNG M-TP<br/>
+        TẠI SHOW 🔥
+      </h1>
+
+      <p class="mt-4 opacity-90 leading-relaxed max-w-3xl">
+        Đây được dự đoán là một sự kiện với nhiều điều đặc biệt mà chưa sự kiện nào từng có.
+        Theo bước chân của Tùng, Sky làm sao mà vắng mặt được ☺️
+      </p>
+
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">🎯 Target dự kiến</div>
+          <div class="text-2xl font-extrabold mt-1">35.000.000đ</div>
+          <div class="text-xs opacity-70 mt-1">Mục tiêu gây quỹ cho hoạt động offline</div>
+          <a href="#donate" class="block w-full px-5 py-3 rounded-xl btn-primary font-semibold text-center mt-3">
+            💙 Đóng góp
+          </a>
+        </div>
+
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">⏳ Thời gian nhận đóng góp</div>
+          <div class="text-lg font-bold mt-1">26/03 – 10/1/2026</div>
+          <div class="text-xs opacity-70 mt-1">Tự đổi trạng thái khi hết hạn</div>
+        </div>
+
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">⏱️ Countdown tới 10/01</div>
+          <div id="countdownText" class="text-lg font-bold mt-1">Đang tải...</div>
+          <div class="text-xs opacity-70 mt-1">Mốc: 10/01/2026 23:59</div>
+        </div>
+
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">📌 Hoạt động dự kiến</div>
+          <div class="text-sm mt-2 opacity-90 space-y-1">
+            <div>• Booth check-in </div>
+            <div>• Băng rôn & poster đại diện fandom</div>
+            <div>• Tặng banner & card bo góc</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col sm:flex-row gap-3"></div>
+
+      <section class="max-w-5xl mx-auto px-6 pb-12" id="progress">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-blue-300">📊 Tiến độ donate (realtime)</h2>
+          <button onclick="openStatementPopup()" class="text-sm px-4 py-2 rounded-xl btn-outline font-semibold">
+            🧾 Sao kê chi tiết
+          </button>
+        </div>
+
+        <div class="mt-6 glass rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-3">
+            <div class="font-bold text-blue-200">💰 Tổng đã đóng góp</div>
+            <div class="text-sm opacity-80"><span id="donatePercent">--</span></div>
+          </div>
+
+          <div class="w-full bg-gray-700 bg-opacity-40 rounded-full h-4 overflow-hidden">
+            <div id="donateBar" class="h-4 bg-blue-500 rounded-full transition-all duration-700" style="width:0%"></div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="chip rounded-xl p-4">
+              <div class="text-sm opacity-75">Đã đóng góp</div>
+              <div class="text-2xl font-extrabold mt-1"><span id="donateAmount">--</span> đ</div>
+            </div>
+            <div class="chip rounded-xl p-4">
+              <div class="text-sm opacity-75">Mục tiêu</div>
+              <div class="text-2xl font-extrabold mt-1">35.000.000 đ</div>
+            </div>
+            <div class="chip rounded-xl p-4">
+              <div class="text-sm opacity-75">Cập nhật</div>
+              <button onclick="fetchDonateProgress()" class="mt-2 w-full px-4 py-2 rounded-xl btn-outline font-semibold">
+                🔄 Làm mới ngay
+              </button>
+              <div class="text-xs opacity-70 mt-1">Tự động mỗi 2 phút</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </section>
+
+  <hr class="divider my-8 max-w-5xl mx-auto"/>
+
+  <!-- Donate info -->
+  <section class="max-w-5xl mx-auto px-6 pb-10" id="donate">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-blue-300">💎 Thông tin đóng góp</h2>
+      <button onclick="openStatementPopup()" class="text-sm px-4 py-2 rounded-xl btn-outline font-semibold">
+        🧾 Mở sao kê
+      </button>
+    </div>
+
+    <div class="mt-6 glass rounded-2xl p-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">STK</div>
+          <div class="text-xl font-extrabold mt-1">1234</div>
+        </div>
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">Ngân hàng</div>
+          <div class="text-xl font-extrabold mt-1">MB Bank</div>
+        </div>
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">Chủ tài khoản</div>
+          <div class="text-xl font-extrabold mt-1">Ha Ha Ha</div>
+        </div>
+      </div>
+
+      <div class="mt-4 chip rounded-xl p-4">
+        <div class="text-sm opacity-75">Nội dung chuyển khoản</div>
+        <div class="text-lg font-bold mt-1">Tên + PJSW</div>
+      </div>
+
+      <p class="mt-4 opacity-90">
+        SKYWARD chân thành cảm ơn sự yêu thương, tin tưởng và ủng hộ của mọi người suốt thời gian qua.
+        Hy vọng dự án sẽ nhận được nhiều tình yêu thương để có thể thành công tốt đẹp 🩵
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider my-8 max-w-5xl mx-auto"/>
+
+  <footer class="max-w-5xl mx-auto px-6 pt-8 text-center text-xs opacity-60">
+    From SKYWARD with love 🩵
+  </footer>
+
+  <!-- Statement Popup -->
+  <div id="statementPopup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6">
+    <div class="max-w-xl mx-auto glass rounded-2xl p-6 border border-gray-700">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold text-blue-200">🧾 Sao kê chi tiết</h3>
+          <p class="text-sm opacity-80 mt-1">
+            Bấm để mở bảng sao kê Google Sheet hoặc bài post công khai (nếu có).
+          </p>
+        </div>
+        <button onclick="closeStatementPopup()" class="px-3 py-1 rounded-full btn-outline text-sm font-semibold">✕</button>
+      </div>
+
+      <div class="mt-5 space-y-3">
+        <a id="sheetLinkBtn" target="_blank"
+           class="block w-full text-center px-5 py-3 rounded-xl btn-primary font-semibold">
+          📄 Mở Google Sheet sao kê
+        </a>
+
+        <a id="postLinkBtn" target="_blank"
+           class="block w-full text-center px-5 py-3 rounded-xl btn-outline font-semibold">
+          🔗 Mở bài post công khai
+        </a>
+
+        <div class="text-xs opacity-60">
+          * Nếu link bài post chưa có, bạn có thể sửa biến <b>FB_POST_URL</b> trong code.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // CONFIG
+    // =========================
+    const DONATE_TARGET = 35000000;
+
+    // Google Sheet link (bạn đưa)
+    const SHEET_VIEW_URL =
+      "https://docs.google.com/spreadsheets/d/1iBVBTMotxi27k57JUGZfsWIrE2e7NCf8nd2n11o57ao/edit?usp=sharing";
+
+    // CSV export (C3) - gid=0 (nếu sheet khác tab đầu -> thay gid)
+    const DONATE_SHEET_CSV =
+      "https://docs.google.com/spreadsheets/d/1iBVBTMotxi27k57JUGZfsWIrE2e7NCf8nd2n11o57ao/export?format=csv&gid=0";
+
+    // Bài post công khai (placeholder -> đổi nếu có)
+    const FB_POST_URL = "#";
+
+    // Timeline donate
+    const DONATE_START = new Date("2025-03-26T00:00:00+07:00");
+    const DONATE_END   = new Date("2026-01-10T23:59:00+07:00"); // mốc countdown
+
+    // =========================
+    // STATUS BADGE + COUNTDOWN
+    // =========================
+    function renderDonateStatusBadge() {
+      const badge = document.getElementById("donateStatusBadge");
+      if (!badge) return;
+
+      const now = new Date();
+      let text = "", cls = "";
+
+      if (now < DONATE_START) {
+        text = "⏳ Sắp mở";
+        cls = "bg-gray-500 bg-opacity-20 border border-gray-400 text-gray-200";
+      } else if (now >= DONATE_START && now <= DONATE_END) {
+        text = "🟢 Đang nhận đóng góp";
+        cls = "bg-green-500 bg-opacity-20 border border-green-400 text-green-200";
+      } else {
+        text = "🔴 Đã kết thúc";
+        cls = "bg-red-500 bg-opacity-20 border border-red-400 text-red-200";
+      }
+
+      badge.textContent = text;
+      badge.className = "px-3 py-1 rounded-full text-xs font-semibold " + cls;
+    }
+
+    function formatCountdown(ms) {
+      const s = Math.max(0, Math.floor(ms / 1000));
+      const days = Math.floor(s / 86400);
+      const hours = Math.floor((s % 86400) / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = s % 60;
+      return `${days}d ${hours}h ${mins}m ${secs}s`;
+    }
+
+    function tickCountdown() {
+      const el = document.getElementById("countdownText");
+      if (!el) return;
+
+      const now = new Date();
+      const diff = DONATE_END.getTime() - now.getTime();
+
+      if (diff > 0) {
+        el.textContent = formatCountdown(diff);
+      } else {
+        el.textContent = "Đã kết thúc 🔴";
+      }
+    }
+
+    renderDonateStatusBadge();
+    tickCountdown();
+    setInterval(() => {
+      tickCountdown();
+      renderDonateStatusBadge();
+    }, 1000);
+
+    // =========================
+    // DONATE PROGRESS (C3)
+    // =========================
+    async function fetchDonateProgress() {
+      const amountEl = document.getElementById("donateAmount");
+      const percentEl = document.getElementById("donatePercent");
+      const barEl = document.getElementById("donateBar");
+
+      if (!amountEl || !percentEl || !barEl) return;
+
+      try {
+        amountEl.textContent = "...";
+        percentEl.textContent = "...";
+
+        const res = await fetch(DONATE_SHEET_CSV, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        const csv = await res.text();
+
+        // C3 = row 3 (index 2), col C (index 2)
+        const lines = csv.trim().split(/\r?\n/);
+        const row3 = lines[2] ? lines[2].split(",") : [];
+        const c3Raw = (row3[2] || "").replace(/"/g, "").trim();
+
+        const donated = Number(String(c3Raw).replace(/[^\d]/g, ""));
+        if (Number.isNaN(donated)) throw new Error("C3 không phải số: " + c3Raw);
+
+        const percent = Math.min(100, Math.round((donated / DONATE_TARGET) * 100));
+
+        amountEl.textContent = donated.toLocaleString("vi-VN");
+        percentEl.textContent = percent + "%";
+        barEl.style.width = percent + "%";
+      } catch (e) {
+        console.error("Lỗi lấy tiến độ donate:", e);
+        amountEl.textContent = "--";
+        percentEl.textContent = "--";
+        barEl.style.width = "0%";
+      }
+    }
+
+    fetchDonateProgress();
+    setInterval(fetchDonateProgress, 120000);
+
+    // =========================
+    // STATEMENT POPUP
+    // =========================
+    function openStatementPopup() {
+      const popup = document.getElementById("statementPopup");
+      const sheetBtn = document.getElementById("sheetLinkBtn");
+      const postBtn = document.getElementById("postLinkBtn");
+
+      if (sheetBtn) sheetBtn.href = SHEET_VIEW_URL;
+
+      if (postBtn) {
+        postBtn.href = FB_POST_URL;
+        if (!FB_POST_URL || FB_POST_URL === "#") {
+          postBtn.classList.add("opacity-50", "pointer-events-none");
+          postBtn.textContent = "🔗 Chưa có link bài post";
+        } else {
+          postBtn.classList.remove("opacity-50", "pointer-events-none");
+          postBtn.textContent = "🔗 Mở bài post công khai";
+        }
+      }
+
+      if (popup) popup.classList.remove("hidden");
+    }
+
+    function closeStatementPopup() {
+      const popup = document.getElementById("statementPopup");
+      if (popup) popup.classList.add("hidden");
+    }
+
+    // đóng popup khi click nền
+    document.getElementById("statementPopup").addEventListener("click", (e) => {
+      if (e.target.id === "statementPopup") closeStatementPopup();
+    });
+  </script>
+
+</body>
+</html>

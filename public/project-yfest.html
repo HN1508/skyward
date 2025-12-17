@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>SKYWARD • Project “Biển Xanh” • Viettel Y-FEST 2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    body { background:#0a0f18; color:#e6ecf5; }
+
+    .glass {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+    .chip {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+    }
+    .divider { border-color: rgba(255,255,255,0.12); }
+    .stage-card:hover { transform: translateY(-4px); transition: .2s; }
+
+    #popup { backdrop-filter: blur(6px); }
+    #popupContent { max-height: 90vh; overflow-y: auto; }
+
+    /* =========================
+       ✅ BACK BUTTON (đẹp hơn)
+       ========================= */
+    .btn-back{
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 60;
+
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: rgba(226,232,240,.96);
+
+      font-weight: 900;
+      letter-spacing: .2px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.35);
+
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+      white-space: nowrap;
+    }
+    .btn-back:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(147,197,253,.55);
+      filter: brightness(1.04);
+    }
+    .btn-back:active{ transform: translateY(0); }
+
+    .btn-back .icon{
+      width: 34px;
+      height: 34px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 999px;
+
+      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.40), rgba(59,130,246,.12));
+      border: 1px solid rgba(59,130,246,.35);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    /* Mobile: đẩy nút back gọn hơn */
+    @media (max-width: 640px){
+      .btn-back{
+        top: 14px;
+        left: 14px;
+        padding: 9px 12px;
+      }
+      .btn-back .icon{ width: 32px; height: 32px; }
+    }
+
+    /* =========================
+       ✅ Nút CTA giống nhau (hover xanh)
+       ========================= */
+    .cta-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+
+      padding: 12px 18px;
+      border-radius: 14px;
+
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+
+      font-weight: 800;
+      color: rgba(230,236,245,.95);
+      text-align:center;
+
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+      white-space: nowrap;
+    }
+    .cta-btn:hover{
+      transform: translateY(-1px);
+      background: linear-gradient(90deg, rgba(37,99,235,.55), rgba(59,130,246,.55));
+      border-color: rgba(147,197,253,.55);
+      filter: brightness(1.05);
+      color: #eef6ff;
+    }
+    .cta-btn:active{ transform: translateY(0); }
+
+    /* giữ style nút “xem chi tiết” hiện tại, chỉ mượt hơn chút */
+    .btn-detail{
+      transition: transform .18s ease, filter .18s ease, background .18s ease;
+    }
+    .btn-detail:hover{
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+    .btn-detail:active{ transform: translateY(0); }
+  </style>
+</head>
+
+<body class="pb-16">
+
+  <!-- ✅ Back button (đã chuyển từ head xuống body + đẹp hơn) -->
+  <a href="index.html" class="btn-back" aria-label="Về trang chính">
+    <span class="icon">←</span>
+    <span>Về trang chính</span>
+  </a>
+
+  <!-- Header -->
+  <header class="max-w-5xl mx-auto px-6 pt-8">
+    <div class="flex items-center justify-between">
+      <a href="/" class="text-blue-300 font-bold tracking-wide">SKYWARD</a>
+      <div class="flex items-center space-x-2">
+        <span class="px-3 py-1 rounded-full text-xs chip">💙 Project</span>
+        <span class="px-3 py-1 rounded-full text-xs chip">🎫 Y-FEST 2025</span>
+        <span id="projectStatusBadge" class="px-3 py-1 rounded-full text-xs font-semibold"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-6 pt-10 pb-8">
+    <div class="glass rounded-2xl p-8 md:p-10 shadow">
+      <p class="text-sm text-blue-200 opacity-90">SKYWARD PROJECT</p>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-blue-300 mt-2 leading-tight">
+        PROJECT “BIỂN XANH” • VIETTEL Y-FEST 2025 💎
+      </h1>
+
+      <p class="mt-4 opacity-85 leading-relaxed max-w-3xl">
+        Vì <b>Sơn Tùng M-TP</b> mà đến 🩵  
+        Skyward xin phép “nổ” những phát súng trong hành trình tạo nên một <b>biển xanh rực rỡ</b> dành tặng
+        vị vua của bầu trời – nơi mọi ánh nhìn đều hướng về Tùng.
+      </p>
+
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">Mục tiêu</div>
+          <div class="text-lg font-bold text-white mt-1">Biển xanh đồng lòng</div>
+        </div>
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">Hoạt động chính</div>
+          <div class="text-lg font-bold text-white mt-1">Quà • Trợ giá • Điều phối</div>
+        </div>
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">Trọng tâm</div>
+          <div class="text-lg font-bold text-white mt-1">Fanzone 5G + VIP</div>
+        </div>
+      </div>
+
+      <!-- ✅ 2 nút CTA: cùng style, hover xanh giống nhau -->
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <a href="#stages" class="cta-btn">
+          🌊 Xem các chặng
+        </a>
+        <a href="#recap" class="cta-btn">
+          🧾 Tổng kết chặng 3
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress bar (tự tính theo timeline dự án) -->
+  <section class="max-w-5xl mx-auto px-6 pb-10">
+    <div class="glass rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-bold text-blue-200">📊 Tiến độ dự án</h3>
+        <span id="progressLabel" class="text-sm opacity-80"></span>
+      </div>
+      <div class="w-full bg-gray-700 bg-opacity-40 rounded-full h-3 overflow-hidden">
+        <div id="progressBar" class="h-3 bg-blue-500 rounded-full transition-all duration-700" style="width:0%"></div>
+      </div>
+      <p id="progressText" class="mt-3 text-sm opacity-80"></p>
+    </div>
+  </section>
+
+  <hr class="divider my-8 max-w-5xl mx-auto"/>
+
+  <!-- Stages -->
+  <section class="max-w-5xl mx-auto px-6 pb-10" id="stages">
+    <h2 class="text-2xl font-bold text-blue-300">🌥️ Các chặng của “Biển Xanh”</h2>
+    <p class="mt-2 opacity-80">
+      Mỗi chặng là một mảnh ghép – quà tặng, trợ giá, điều phối… tất cả cùng hướng đến một biển xanh rực rỡ cho Tùng 🩵
+    </p>
+
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      <!-- Stage 1 -->
+      <div class="stage-card glass rounded-2xl p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-blue-200">CHẶNG 1 • Special Gifts</h3>
+            <p class="text-sm opacity-80 mt-1">500 sets + 500 photocard cán kim tuyến</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs chip">🎁 Quà tặng</span>
+        </div>
+        <p class="mt-3 opacity-85">
+          Những món quà từ team Skyward (cờ cầm tay + photocard cán kim tuyến) dành cho Sky tham gia Y-Fest.
+        </p>
+        <button onclick="openStage(1)" class="btn-detail mt-4 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+          Xem chi tiết
+        </button>
+      </div>
+
+      <!-- Stage 2 -->
+      <div class="stage-card glass rounded-2xl p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-blue-200">CHẶNG 2 • Blue Love</h3>
+            <p class="text-sm opacity-80 mt-1">Trợ giá 100 suất vé Zone 5G-4</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs chip">🎫 Trợ giá</span>
+        </div>
+        <p class="mt-3 opacity-85">
+          Trợ giá <b>100 suất vé Zone 5G-4</b> để đưa thật nhiều Bầu Trời Sài Gòn đến gần Tùng nhất có thể.
+        </p>
+        <button onclick="openStage(2)" class="btn-detail mt-4 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+          Xem chi tiết
+        </button>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="stage-card glass rounded-2xl p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-blue-200">CHẶNG 3 • Sức mạnh bầu trời</h3>
+            <p class="text-sm opacity-80 mt-1">2500 “đốm sáng” + điều phối quà cộng đồng</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs chip">🌟 Phát quà</span>
+        </div>
+        <p class="mt-3 opacity-85">
+          700 gậy ngôi sao chữ M-TP + 300 gậy ngôi sao xanh + 200 gậy trái tim xanh (cho Sky chưa có Skylight),
+          và 1300 gậy thẳng xanh cho khu vực 5G 4–5 & nonfan yêu mến Tùng.
+        </p>
+        <button onclick="openStage(3)" class="btn-detail mt-4 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+          Xem chi tiết
+        </button>
+      </div>
+
+      <!-- Recap Stage 3 -->
+      <div class="stage-card glass rounded-2xl p-6" id="recap">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-blue-200">TỔNG KẾT • Chặng 3</h3>
+            <p class="text-sm opacity-80 mt-1">Lời cảm ơn + rút kinh nghiệm + sao kê</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs chip">🧾 Minh bạch</span>
+        </div>
+        <p class="mt-3 opacity-85">
+          “Biển xanh” hôm ấy không chỉ đến từ ánh sáng, mà đến từ sự đồng lòng, tình yêu và niềm tự hào của tất cả Sky.
+          Skyward gửi lời cảm ơn – và xin lỗi nếu có thiếu sót trong điều phối/phát quà.
+        </p>
+
+        <div class="mt-4 flex flex-col sm:flex-row gap-3">
+          <button onclick="openStage(4)" class="btn-detail px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+            Đọc tổng kết
+          </button>
+          <a href="https://docs.google.com/spreadsheets/d/1F0uTCbcrXQCdRF6x14NpvjfDCRVwRyQZvCOqpg7wdJs/edit?usp=sharing"
+             target="_blank"
+             class="cta-btn">
+            🔗 Sao kê chặng 3
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Popup -->
+  <div id="popup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6 overflow-y-auto">
+    <div id="popupContent" class="max-w-3xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-700"></div>
+  </div>
+
+  <footer class="max-w-5xl mx-auto px-6 pt-8 text-center text-xs opacity-60">
+    🌊 From Skyward team with love • Vì bầu trời, từ bầu trời — SKYWARD 💙
+  </footer>
+
+  <script>
+    // =========================
+    // STAGE DATA
+    // =========================
+    const stageData = {
+      1: {
+        title: 'PROJECT "BIỂN XANH" • CHẶNG 1 — PREVIEW GIFTS FROM TEAM SKYWARD 💙',
+        subtitle: "Quà tặng preview trước thềm Y-FEST 2025",
+        image: "images/yfest/stage1.jpg",
+        linkLabel: "🔗 Link bài viết chặng 1",
+        linkUrl: "https://www.facebook.com/share/p/1UJiPMwamG/",
+        html: `
+          <p class="opacity-90 leading-relaxed">
+            Vì Sơn Tùng M-TP mà đến 🩵  
+            Skyward xin phép “nổ” phát súng đầu tiên trong dự án tạo biển xanh dành tặng vị vua của bầu trời 💎
+          </p>
+
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="chip rounded-xl p-4">
+              <div class="text-sm opacity-75">Khu vực 5G 1–2–3 & VIP/VVIP</div>
+              <div class="text-lg font-bold mt-1">✨ 500 sets</div>
+              <div class="text-sm opacity-80 mt-1">Cờ cầm tay + photocard cán kim tuyến (dành cho bạn có Skylight).</div>
+            </div>
+            <div class="chip rounded-xl p-4">
+              <div class="text-sm opacity-75">Khu vực 5G 4–5</div>
+              <div class="text-lg font-bold mt-1">✨ 500 photocard</div>
+              <div class="text-sm opacity-80 mt-1">Dành cho bạn có Skylight hoặc chứng minh là Sky (like M-TP / Skyward...).</div>
+            </div>
+          </div>
+
+          <p class="mt-4 opacity-90">
+            Hy vọng món quà nhỏ xinh này mang lại niềm vui và trở thành một phần kỷ niệm đẹp tại Y-FEST 2025 🩵
+          </p>
+        `
+      },
+
+      2: {
+        title: 'PROJECT "BIỂN XANH" • CHẶNG 2 — BLUE LOVE FROM TEAM SKYWARD 💙',
+        subtitle: "Trợ giá vé Zone 5G-4",
+        image: "images/yfest/stage2.jpg",
+        linkLabel: "🔗 Link bài viết chặng 2",
+        linkUrl: "https://www.facebook.com/share/p/1AJUEsrSRU/",
+        html: `
+          <p class="opacity-90 leading-relaxed">
+            Vào ngày <b>2/11</b> tại phố đi bộ Nguyễn Huệ, Sky Sài Gòn sẽ chính thức gặp “Người Ấy” 🔥
+          </p>
+
+          <div class="mt-4 chip rounded-xl p-4">
+            <p><b>❌ NGƯNG TRỢ GIÁ VÌ HẾT VÉ ❌</b></p>
+            <p class="mt-2 opacity-90">
+              Skyward xin phép trợ giá <b>100 suất vé Zone 5G-4</b> với mong muốn đưa thật nhiều Bầu Trời Sài Gòn đến gần Tùng nhất có thể.
+            </p>
+          </div>
+
+          <p class="mt-4 font-semibold text-blue-200">Cách nhận trợ giá</p>
+          <ul class="mt-2 list-disc list-inside space-y-1 opacity-90">
+            <li>📩 Inbox cho page Skyward — tụi mình sẽ hướng dẫn từng bạn cho đến khi hết slot.</li>
+            <li>Sky ở xa muốn tặng vé cho Sky khác: cứ nhắn Skyward luôn nha 🫶</li>
+          </ul>
+
+          <p class="mt-4 text-sm opacity-80">
+            Team cũng tuyển thêm CTV phát đồ riêng zone 4 — bạn nào có hứng thú cứ tự tin xung phong 🫶
+          </p>
+        `
+      },
+
+      3: {
+        title: 'PROJECT "BIỂN XANH" • CHẶNG 3 — SỨC MẠNH BẦU TRỜI 💙',
+        subtitle: "2500 đốm sáng + điều phối quà cộng đồng",
+        image: "images/yfest/stage3.jpg",
+        linkLabel: "🔗 Link bài viết chặng 3",
+        linkUrl: "https://www.facebook.com/share/p/16nCWEmNbv/",
+        html: `
+          <p class="opacity-90 leading-relaxed">
+            Chặng 3 là một phần nhỏ quà Skyward dành tặng sinh nhật gia đình mình,
+            và phần lớn hơn là sự chung tay góp sức đồng lòng của Sky dành cho Y-FEST 2025 🩵
+          </p>
+
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="chip rounded-xl p-4">
+              <div class="text-sm opacity-75">Cho Sky chưa có Skylight (5G 1–2–3, VIP, VVIP)</div>
+              <ul class="mt-2 space-y-1 opacity-90">
+                <li>🌟 700 gậy ngôi sao in chữ M-TP</li>
+                <li>💙 300 gậy ngôi sao xanh dương</li>
+                <li>💙 200 gậy trái tim xanh dương</li>
+              </ul>
+            </div>
+            <div class="chip rounded-xl p-4">
+              <div class="text-sm opacity-75">Cho 5G 4–5 & nonfan yêu mến Tùng</div>
+              <p class="mt-2 text-lg font-bold">💙 1300 gậy thẳng xanh dương</p>
+              <p class="text-sm opacity-80 mt-1">Tổng: 2500 “đốm sáng” xanh dương 🩵</p>
+            </div>
+          </div>
+
+          <div class="mt-4 chip rounded-xl p-4">
+            <p class="font-semibold text-blue-200">Ngoài ra còn điều phối quà cộng đồng</p>
+            <p class="mt-2 opacity-90">
+              42 bảng LED cầm tay • 72 kính phát sáng • 50 vương miện phát sáng…  
+              Cảm ơn nhóm cộng đồng Skyward, một bạn Sky giấu tên, bạn June, Sky Power team,… đã tin tưởng giao cho Skyward trọng trách này.
+            </p>
+          </div>
+
+          <p class="mt-4 opacity-90">
+            Đêm Y-FEST 2025, hãy cùng nhau thắp sáng khán đài để khi ánh đèn sân khấu vụt tắt,
+            cả bầu trời vẫn rực rỡ một màu xanh dương lung linh của Sky và Sơn Tùng M-TP nha 🩵
+          </p>
+        `
+      },
+
+      4: {
+        title: "TỔNG KẾT CHẶNG 3 • PROJECT BIỂN XANH • Y-FEST 2025 💙",
+        subtitle: "Cảm ơn • Xin lỗi vì thiếu sót • Rút kinh nghiệm",
+        image: "images/yfest/note.jpg",
+        linkLabel: "🔗 Sao kê chặng 3",
+        linkUrl: "https://docs.google.com/spreadsheets/d/1F0uTCbcrXQCdRF6x14NpvjfDCRVwRyQZvCOqpg7wdJs/edit?usp=sharing",
+        html: `
+          <p class="opacity-90 leading-relaxed">
+            Chặng 3 đã khép lại thật rực rỡ tại Y-FEST 2025 — nơi hàng ngàn trái tim cùng hòa chung nhịp đập mang tên Sơn Tùng M-TP.  
+            “Biển xanh” hôm ấy không chỉ đến từ hàng ngàn ánh sáng, mà còn từ tình yêu, sự đồng lòng và niềm tự hào của tất cả chúng ta 💙
+          </p>
+
+          <p class="mt-4 opacity-90">
+            Skyward xin gửi lời cảm ơn chân thành nhất đến mọi người đã cùng góp sức — từ những bạn quyên góp, chuẩn bị quà tặng,
+            đến tất cả Sky có mặt tại Y-FEST cùng hát, cùng hô vang tên anh.
+          </p>
+
+          <p class="mt-4 opacity-90">
+            Đặc biệt, cảm ơn các bạn cộng tác viên đã hỗ trợ hết mình trong khâu đóng gói, vận chuyển và phát quà tại sự kiện.
+            Nhờ các bạn mà biển xanh được lan tỏa trọn vẹn hơn 🩵
+          </p>
+
+          <div class="mt-4 chip rounded-xl p-4">
+            <p class="font-semibold text-blue-200">🙏 Lời xin lỗi</p>
+            <p class="mt-2 opacity-90">
+              Dù đã cố gắng hết sức để chuẩn bị chu đáo, nhưng không tránh khỏi thiếu sót trong phát quà, điều phối và liên lạc.
+              Skyward xin chân thành xin lỗi nếu có bạn nào chưa nhận được quà hoặc gặp khó khăn khi liên hệ 💙
+            </p>
+          </div>
+
+          <p class="mt-4 opacity-90">
+            Y-FEST khép lại, nhưng “Biển Xanh” vẫn còn đó — trong ánh mắt, trong tiếng hát và trong trái tim của mỗi Sky.
+            Cảm ơn vì đã cùng nhau làm nên một bầu trời thật đẹp cho sinh nhật của chúng ta và Sơn Tùng M-TP 💎
+          </p>
+
+          <p class="mt-4 text-sm opacity-80">🩵 FROM SKYWARD TEAM WITH LOVE</p>
+        `
+      }
+    };
+
+    function openStage(id) {
+      const p = document.getElementById("popup");
+      const c = document.getElementById("popupContent");
+      const s = stageData[id];
+
+      c.innerHTML = `
+        <div class="space-y-4">
+          <button onclick="closeStage()" class="float-right text-sm px-3 py-1 bg-gray-800 rounded-full hover:bg-gray-700">✕ Đóng</button>
+
+          <h2 class="text-2xl font-bold text-blue-300 mb-1">${s.title}</h2>
+          <p class="text-sm opacity-80 mb-3">${s.subtitle || ""}</p>
+
+          ${s.image ? `
+            <div class="rounded-2xl overflow-hidden border border-gray-700">
+              <img src="${s.image}" alt="${s.title}" class="w-full object-cover max-h-72">
+            </div>
+          ` : ""}
+
+          <div class="prose prose-sm prose-invert max-w-none leading-relaxed">
+            ${s.html}
+          </div>
+
+          ${s.linkUrl && s.linkUrl !== "#" ? `
+            <a href="${s.linkUrl}" target="_blank"
+              class="inline-flex items-center mt-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold">
+              ${s.linkLabel || "🔗 Xem chi tiết"}
+            </a>
+          ` : `
+            <div class="mt-2 text-sm opacity-70">🔗 Link bài viết: (bạn dán link vào stageData cho chặng này)</div>
+          `}
+
+          <div class="pt-2 text-xs opacity-60">
+            Vì bầu trời, từ bầu trời — SKYWARD 💙
+          </div>
+        </div>
+      `;
+      p.classList.remove("hidden");
+    }
+
+    function closeStage() {
+      document.getElementById("popup").classList.add("hidden");
+    }
+
+    // =========================
+    // STATUS BADGE + PROGRESS
+    // =========================
+    (function () {
+      const START_DATE = new Date("2025-10-01T00:00:00");
+      const END_DATE   = new Date("2025-11-10T00:00:00");
+
+      const badge = document.getElementById("projectStatusBadge");
+      const progressLabel = document.getElementById("progressLabel");
+      const progressBar = document.getElementById("progressBar");
+      const progressText = document.getElementById("progressText");
+
+      const now = new Date();
+
+      let status = "";
+      let classes = "";
+      if (now < START_DATE) {
+        status = "⏳ Sắp khởi động";
+        classes = "bg-gray-500 bg-opacity-20 border border-gray-400 text-gray-200";
+      } else if (now >= START_DATE && now <= END_DATE) {
+        status = "🟢 Đang triển khai";
+        classes = "bg-green-500 bg-opacity-20 border border-green-400 text-green-200";
+      } else {
+        status = "✅ Đã tổng kết";
+        classes = "bg-blue-500 bg-opacity-20 border border-blue-400 text-blue-200";
+      }
+      badge.textContent = status;
+      badge.className = "px-3 py-1 rounded-full text-xs font-semibold " + classes;
+
+      const total = END_DATE.getTime() - START_DATE.getTime();
+      const passed = Math.max(0, Math.min(total, now.getTime() - START_DATE.getTime()));
+      const percent = total > 0 ? Math.round((passed / total) * 100) : 0;
+
+      progressBar.style.width = percent + "%";
+      progressLabel.textContent = percent + "%";
+
+      if (now < START_DATE) {
+        progressText.textContent = "⏳ Dự án sắp bắt đầu — chuẩn bị biển xanh thôi nào!";
+      } else if (now <= END_DATE) {
+        progressText.textContent = "🌊 Dự án đang triển khai — mỗi Sky là một đốm sáng xanh dương!";
+      } else {
+        progressText.textContent = "🩵 Dự án đã tổng kết — cảm ơn vì đã cùng nhau làm nên một bầu trời thật đẹp.";
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKYWARD • Dự án sinh nhật Sơn Tùng M-TP</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<style>
+  body {
+    background: radial-gradient(1200px 700px at 20% -10%, rgba(59,130,246,.25), transparent 55%),
+                radial-gradient(900px 600px at 90% 10%, rgba(34,197,94,.10), transparent 55%),
+                radial-gradient(900px 650px at 60% 110%, rgba(168,85,247,.10), transparent 60%),
+                #0a0f18;
+    color: #e6ecf5;
+    font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  }
+
+  /* container */
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  /* top nav */
+  .topbar{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    background: linear-gradient(to bottom, rgba(10,15,24,.86), rgba(10,15,24,.38));
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  /* ✅ NEW: layout topbar giống hình 2 */
+  .topbar-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  @media (min-width: 768px){
+    .topbar-row{ flex-wrap: nowrap; }
+  }
+
+  /* ✅ back button đẹp gọn */
+  .btn-back{
+    display:inline-flex;
+    align-items:center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.05);
+    color: rgba(191,219,254,.95);
+    font-weight: 800;
+    letter-spacing: .2px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.25);
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    white-space: nowrap;
+  }
+  .btn-back:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,.08);
+    border-color: rgba(147,197,253,.45);
+  }
+  .btn-back:active{ transform: translateY(0); }
+  .btn-back .icon{
+    width: 34px; height: 34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    border-radius: 999px;
+    background: rgba(59,130,246,.18);
+    border: 1px solid rgba(59,130,246,.25);
+    font-weight: 900;
+  }
+
+  /* ✅ pills: ép 1 hàng + dồn phải trên desktop (giống hình 2) */
+  .pill-row{
+    display:flex;
+    gap: 12px;
+    align-items:center;
+    justify-content:flex-start;
+    flex-wrap: wrap;
+  }
+  @media (min-width: 768px){
+    .pill-row{
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      margin-left: auto;
+    }
+  }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap: 10px;
+    padding: 9px 14px;              /* nhỏ hơn 1 chút */
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    color: rgba(230,236,245,.92);
+    font-weight: 900;
+    letter-spacing: .2px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+    transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+    white-space: nowrap;
+    font-size: 14px;                /* giống cảm giác hình 2 */
+  }
+  .pill:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,.06);
+    border-color: rgba(255,255,255,.16);
+    filter: brightness(1.02);
+  }
+  .pill .ico{
+    width: 18px; height: 18px;      /* nhỏ hơn */
+    display:inline-flex; align-items:center; justify-content:center;
+    opacity: .95;
+  }
+  .pill-status{
+    background: rgba(16,185,129,.14);
+    border-color: rgba(16,185,129,.55);
+    color: rgba(209,250,229,.95);
+    box-shadow: 0 14px 34px rgba(16,185,129,.10);
+  }
+  .pill-status:hover{
+    background: rgba(16,185,129,.18);
+    border-color: rgba(16,185,129,.70);
+  }
+  .dot{
+    width: 9px; height: 9px;        /* nhỏ hơn */
+    border-radius: 999px;
+    background: rgba(16,185,129,1);
+    box-shadow: 0 0 0 4px rgba(16,185,129,.18);
+  }
+
+  /* hero */
+  .hero{ padding: 72px 20px 40px; }
+  .hero-card{
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-card::before{
+    content:"";
+    position:absolute; inset:-1px;
+    background: radial-gradient(800px 260px at 20% 0%, rgba(59,130,246,.28), transparent 60%),
+                radial-gradient(700px 240px at 90% 20%, rgba(168,85,247,.18), transparent 55%);
+    pointer-events:none;
+  }
+  .hero-inner{ position: relative; padding: 34px 26px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.05);
+    font-weight: 700;
+    color: rgba(191,219,254,.95);
+    font-size: 12px;
+    letter-spacing: .25px;
+  }
+  .hero-title{
+    font-size: clamp(28px, 4.2vw, 44px);
+    line-height: 1.05;
+    font-weight: 900;
+    margin-top: 12px;
+    background: linear-gradient(90deg, #bfdbfe, #93c5fd, #a5b4fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-desc{
+    margin-top: 14px;
+    color: rgba(230,236,245,.84);
+    line-height: 1.75;
+    max-width: 780px;
+  }
+  .hero-actions{
+    margin-top: 18px;
+    display:flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .btn-primary{
+    display:inline-flex; align-items:center; gap:10px;
+    padding: 11px 14px;
+    border-radius: 14px;
+    background: linear-gradient(90deg, rgba(37,99,235,.95), rgba(59,130,246,.95));
+    border: 1px solid rgba(147,197,253,.35);
+    box-shadow: 0 18px 44px rgba(37,99,235,.25);
+    font-weight: 800;
+    color: #eef6ff;
+    transition: transform .18s ease, filter .18s ease;
+  }
+  .btn-primary:hover{ transform: translateY(-1px); filter: brightness(1.04); }
+  .btn-ghost{
+    display:inline-flex; align-items:center; gap:10px;
+    padding: 11px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.12);
+    font-weight: 800;
+    color: rgba(230,236,245,.92);
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .btn-ghost:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,.07);
+    border-color: rgba(255,255,255,.18);
+  }
+
+  /* stage grid section */
+  .section-title{
+    font-size: 22px;
+    font-weight: 900;
+    color: rgba(191,219,254,.96);
+    letter-spacing: .2px;
+  }
+
+  /* cards */
+  .stage-grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  @media (min-width: 768px){
+    .stage-grid{ grid-template-columns: 1fr 1fr; gap: 16px; }
+  }
+
+  .stage-card{
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+    box-shadow: 0 18px 50px rgba(0,0,0,.35);
+    padding: 18px 18px 16px;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .stage-card::before{
+    content:"";
+    position:absolute; inset:-2px;
+    background: radial-gradient(450px 180px at 15% 0%, rgba(59,130,246,.12), transparent 60%),
+                radial-gradient(420px 160px at 95% 20%, rgba(168,85,247,.10), transparent 62%);
+    pointer-events:none;
+  }
+  .stage-card:hover{
+    transform: translateY(-4px);
+    border-color: rgba(147,197,253,.35);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
+  }
+
+  .stage-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+  }
+  .stage-kicker{
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .28px;
+    color: rgba(147,197,253,.92);
+    opacity: .95;
+  }
+  .stage-title{
+    margin-top: 4px;
+    font-size: 16px;
+    font-weight: 900;
+    color: rgba(219,234,254,.98);
+    line-height: 1.2;
+  }
+  .stage-desc{
+    margin-top: 10px;
+    color: rgba(230,236,245,.78);
+    line-height: 1.65;
+    position: relative;
+  }
+
+  .stage-actions{
+    margin-top: 14px;
+    display:flex;
+    justify-content: flex-start;
+    gap: 10px;
+    position: relative;
+  }
+  .btn-detail{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(37,99,235,.18);
+    border: 1px solid rgba(59,130,246,.25);
+    color: rgba(219,234,254,.98);
+    font-weight: 900;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .btn-detail:hover{
+    transform: translateY(-1px);
+    background: rgba(37,99,235,.24);
+    border-color: rgba(147,197,253,.35);
+  }
+
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    color: rgba(230,236,245,.78);
+    font-weight: 800;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* popup */
+  #popup { backdrop-filter: blur(6px); }
+  #popupContent { max-height: 90vh; overflow-y: auto; }
+  .prose ul { margin-top: 0.5rem; }
+
+  /* ảnh popup */
+  .popup-img-wrap{
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+    overflow: hidden;
+  }
+  .popup-img{
+    width: 100%;
+    height: clamp(180px, 32vw, 320px);
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    cursor: zoom-in;
+    transform: scale(1);
+    transition: transform .22s ease;
+    will-change: transform;
+  }
+  .popup-img-wrap:hover .popup-img{ transform: scale(1.08); }
+
+  /* overlay */
+  .img-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 18px;
+  }
+  .img-overlay.show{ display:flex; }
+  .img-overlay img{
+    width: min(92vw, 980px);
+    height: auto;
+    max-height: 92vh;
+    object-fit: contain;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.04);
+    cursor: zoom-out;
+  }
+  .overlay-close{
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 10000;
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06);
+    color: #e6ecf5;
+    border-radius: 999px;
+    padding: 8px 10px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .soft-hr{
+    border: 0;
+    height: 1px;
+    margin: 20px 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+  }
+
+  .footer-note{
+    text-align:center;
+    margin-top: 26px;
+    color: rgba(230,236,245,.55);
+    font-size: 12px;
+  }
+</style>
+</head>
+
+<body class="pb-20">
+
+<!-- ✅ TOP BAR: Back trái | Pills phải (giống hình 2) -->
+<div class="topbar">
+  <div class="wrap px-4 py-3">
+    <div class="topbar-row">
+      <!-- left: back -->
+      <a href="index.html" class="btn-back" aria-label="Về trang chính">
+        <span class="icon">←</span>
+        <span>Về trang chính</span>
+      </a>
+
+      <!-- right: pills -->
+      <div class="pill-row">
+        <span class="pill" title="Nền tảng">
+          <span class="ico">🎧</span>
+          <span>Stationhead</span>
+        </span>
+
+        <span class="pill pill-status" title="Trạng thái dự án">
+          <span class="dot"></span>
+          <span>Đã hoàn thành</span>
+        </span>
+
+        <a id="postPill" class="pill" href="#" target="_blank" rel="noopener" title="Mở bài đăng">
+          <span class="ico">🔗</span>
+          <span>Bài đăng</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HERO ================ -->
+<section class="hero">
+  <div class="wrap px-4">
+    <div class="hero-card">
+      <div class="hero-inner">
+        <span class="badge">✨ SKYWARD • DỰ ÁN RA MẮT</span>
+
+        <h1 class="hero-title">6 Chặng Sinh Nhật<br>Sơn Tùng M-TP</h1>
+
+        <p class="hero-desc">
+          “Skyward” – hướng về bầu trời. Là ánh nhìn không rời khỏi một vì sao.
+          Là trái tim không ngừng rung động trước người nghệ sĩ mang tên <b>Sơn Tùng M-TP</b>.
+          <br><br>
+          Nhân dịp sinh nhật Tùng, Skyward gửi đến mọi người món quà chào sân:
+          <b>chuỗi 6 project sinh nhật</b> được ấp ủ bằng tất cả yêu thương và tự hào của những người mang tên Sky.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="document.getElementById('stages').scrollIntoView({behavior:'smooth'})">
+            🚀 Xem 6 chặng dự án
+          </button>
+          <a class="btn-ghost" href="index.html">
+            🏠 Trang chính
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== STAGE LIST =============== -->
+<section id="stages" class="px-4">
+  <div class="wrap">
+    <div class="px-1">
+      <h2 class="section-title">6 Chặng Dự Án</h2>
+    </div>
+
+    <div class="stage-grid mt-4">
+
+      <!-- Stage 1 -->
+      <div class="stage-card">
+        <div class="stage-head">
+          <div>
+            <div class="stage-kicker">STAGE 1</div>
+            <div class="stage-title">Stationhead Give Away</div>
+          </div>
+          <span class="chip">🎧 Stationhead</span>
+        </div>
+        <p class="stage-desc">Minigame với những món quà đáng yêu dành cho các Sky hoạt động trên Sky Stationhead.</p>
+        <div class="stage-actions">
+          <button onclick="openStage(1)" class="btn-detail">Xem chi tiết →</button>
+        </div>
+      </div>
+
+      <!-- Stage 2 -->
+      <div class="stage-card">
+        <div class="stage-head">
+          <div>
+            <div class="stage-kicker">STAGE 2</div>
+            <div class="stage-title">Mega LED Hà Nội</div>
+          </div>
+          <span class="chip">🟦 LED</span>
+        </div>
+        <p class="stage-desc">LED chúc mừng sinh nhật Tùng chạy 3 ngày tại Lotte Mall Tây Hồ với nhiều phần quà check-in hấp dẫn.</p>
+        <div class="stage-actions">
+          <button onclick="openStage(2)" class="btn-detail">Xem chi tiết →</button>
+        </div>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="stage-card">
+        <div class="stage-head">
+          <div>
+            <div class="stage-kicker">STAGE 3</div>
+            <div class="stage-title">LED 2 mặt TP.HCM</div>
+          </div>
+          <span class="chip">📍 Q1</span>
+        </div>
+        <p class="stage-desc">LED sinh nhật tại trung tâm Quận 1 – Phạm Ngọc Thạch. Quà tặng cho các Sky đến check-in.</p>
+        <div class="stage-actions">
+          <button onclick="openStage(3)" class="btn-detail">Xem chi tiết →</button>
+        </div>
+      </div>
+
+      <!-- Stage 4 -->
+      <div class="stage-card">
+        <div class="stage-head">
+          <div>
+            <div class="stage-kicker">STAGE 4</div>
+            <div class="stage-title">Bánh sinh nhật thiết kế riêng</div>
+          </div>
+          <span class="chip">🎂 Concept</span>
+        </div>
+        <p class="stage-desc">Chiếc bánh cảm hứng từ Hoàng Tử Bé – biểu tượng ước mơ, yêu thương và hành trình của Tùng.</p>
+        <div class="stage-actions">
+          <button onclick="openStage(4)" class="btn-detail">Xem chi tiết →</button>
+        </div>
+      </div>
+
+      <!-- Stage 5 -->
+      <div class="stage-card">
+        <div class="stage-head">
+          <div>
+            <div class="stage-kicker">STAGE 5</div>
+            <div class="stage-title">SKYWARD × Support Teams</div>
+          </div>
+          <span class="chip">🤝 Collab</span>
+        </div>
+        <p class="stage-desc">Hộp quà sinh nhật gửi tặng Sơn Tùng M-TP – gom góp từ Skyward và những người bạn yêu thương.</p>
+        <div class="stage-actions">
+          <button onclick="openStage(5)" class="btn-detail">Xem chi tiết →</button>
+        </div>
+      </div>
+
+      <!-- Stage 6 -->
+      <div class="stage-card">
+        <div class="stage-head">
+          <div>
+            <div class="stage-kicker">STAGE 6</div>
+            <div class="stage-title">Quà tặng staff M-TP</div>
+          </div>
+          <span class="chip">☕ Tri ân</span>
+        </div>
+        <p class="stage-desc">Một set trà chiều ấm áp gửi đến các cộng sự thầm lặng phía sau ánh đèn sân khấu.</p>
+        <div class="stage-actions">
+          <button onclick="openStage(6)" class="btn-detail">Xem chi tiết →</button>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="soft-hr">
+
+    <div class="flex justify-center">
+      <a href="index.html" class="btn-back">
+        <span class="icon">←</span>
+        <span>Về trang chính</span>
+      </a>
+    </div>
+
+    <div class="footer-note">Vì bầu trời, từ bầu trời – SKYWARD.</div>
+  </div>
+</section>
+
+<!-- POPUP DETAIL -->
+<div id="popup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6 overflow-y-auto">
+  <div id="popupContent" class="max-w-3xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-700"></div>
+</div>
+
+<!-- FULL IMAGE OVERLAY -->
+<div id="imgOverlay" class="img-overlay" aria-hidden="true">
+  <button class="overlay-close" type="button" onclick="closeImgOverlay()">Đóng ✕</button>
+  <img id="overlayImg" src="" alt="Full image" />
+</div>
+
+<script>
+/* ✅ DÁN LINK BÀI ĐĂNG VÀO ĐÂY */
+const POST_URL = "https://www.facebook.com/share/xxxxxxxxxx/?mibextid=wwXIfr"; // <-- đổi link thật
+
+// gắn link pill "Bài đăng"
+(function(){
+  const a = document.getElementById("postPill");
+  if(!a) return;
+  if(POST_URL && POST_URL !== "#"){
+    a.href = POST_URL;
+  }else{
+    a.style.display = "none";
+  }
+})();
+
+const stageData = {
+  1: {
+    title: "STAGE 1 • SKY STATIONHEAD GIVE AWAY",
+    subtitle: "Minigame dành riêng cho các Sky hoạt động trên Sky Stationhead",
+    image: "images/pr1/stage1.jpg",
+    linkLabel: "Xem bài / điền form",
+    linkUrl: "https://forms.gle/8ur9UkjqsaF6FNz16",
+    summary: "Minigame mở màn chuỗi dự án ra mắt Skyward, vừa khuyến khích Sky tham gia Stationhead vừa tri ân các bạn chăm chỉ trong phòng stream.",
+    bullets: [
+      "Tổng quà: 60 phần (chia 2 hạng mục).",
+      "Có hạng mục theo top stream và hạng mục quay số ngẫu nhiên.",
+      "Thông tin chi tiết & điều kiện tham gia xem trong link."
+    ]
+  },
+  2: {
+    title: "STAGE 2 • MEGA LED LOTTE MALL TÂY HỒ – HÀ NỘI",
+    subtitle: "Màn mega LED mừng sinh nhật tại Lotte Mall Tây Hồ",
+    image: "images/pr1/stage2.jpg",
+    linkLabel: "Xem bài viết Facebook",
+    linkUrl: "https://www.facebook.com/share/1YGi7A6M1U/?mibextid=wwXIfr",
+    summary: "Mega LED sinh nhật chạy nhiều ngày tại Lotte Mall Tây Hồ, kèm hoạt động check-in nhận quà cho Sky tham gia.",
+    bullets: [
+      "LED chạy theo khung giờ trong ngày tại địa điểm trung tâm.",
+      "Có quà check-in theo lượt (đến sớm / tiếp theo / sau đó).",
+      "Chi tiết cách nhận quà xem trong link."
+    ]
+  },
+  3: {
+    title: "STAGE 3 • LED 2 MẶT PHẠM NGỌC THẠCH – TP.HCM",
+    subtitle: "LED sinh nhật tại trung tâm Quận 1 cho Sky Sài Gòn",
+    image: "images/pr1/stage3.jpg",
+    linkLabel: "Xem bài viết Facebook",
+    linkUrl: "https://www.facebook.com/share/19LWbVbpXU/?mibextid=wwXIfr",
+    summary: "LED 2 mặt tại Phạm Ngọc Thạch (Q1) giúp Sky Sài Gòn có điểm check-in sinh nhật, kèm quà theo thể lệ.",
+    bullets: [
+      "LED tại vị trí trung tâm, dễ check-in.",
+      "Quà tặng theo lượt đăng bài check-in.",
+      "Chi tiết thể lệ & cách nhận quà xem trong link."
+    ]
+  },
+  4: {
+    title: "STAGE 4 • BÁNH SINH NHẬT THIẾT KẾ RIÊNG",
+    subtitle: "Chiếc bánh cảm hứng từ Hoàng Tử Bé – câu chuyện bằng đường kem và ký ức",
+    image: "images/pr1/stage4.jpg",
+    linkLabel: "Xem album / bài viết",
+    linkUrl: "#",
+    summary: "Chiếc bánh sinh nhật thiết kế riêng là một biểu tượng nhỏ của ước mơ và hành trình, gửi gắm tình cảm Skyward dành cho Tùng.",
+    bullets: [
+      "Concept cảm hứng Hoàng Tử Bé.",
+      "Tông màu & chi tiết mang tinh thần SKY.",
+      "Album chi tiết sẽ cập nhật ở link khi có."
+    ]
+  },
+  5: {
+    title: "STAGE 5 • QUÀ TẶNG SINH NHẬT GỬI TỚI SƠN TÙNG M-TP",
+    subtitle: "SKYWARD × Thiếu Niên Phi Công × Support Team",
+    image: "images/pr1/stage5.jpg",
+    linkLabel: "Xem bài viết chi tiết",
+    linkUrl: "#",
+    summary: "Chặng collab cùng các supporter/nhóm bạn để gom góp yêu thương thành những hộp quà sinh nhật gửi tới Sơn Tùng M-TP.",
+    bullets: [
+      "Có sự đồng hành từ nhiều team/supporter.",
+      "Quà được chuẩn bị tỉ mỉ theo concept chung.",
+      "Chi tiết sẽ cập nhật ở link khi có."
+    ]
+  },
+  6: {
+    title: "STAGE 6 • MÓN QUÀ NHỎ GỬI TỚI STAFF M-TP",
+    subtitle: "Trà chiều ấm áp dành cho những người cộng sự thầm lặng",
+    image: "images/pr1/stage6.jpg",
+    linkLabel: "Xem album / bài viết",
+    linkUrl: "#",
+    summary: "Một set trà chiều nhỏ gửi đến staff như lời cảm ơn những người đứng sau ánh đèn sân khấu và hành trình âm nhạc.",
+    bullets: [
+      "Tập trung tri ân staff/ekip hậu trường.",
+      "Quà nhẹ nhàng – ấm áp – đúng tinh thần cảm ơn.",
+      "Album chi tiết sẽ cập nhật ở link khi có."
+    ]
+  }
+};
+
+function openImgOverlay(src, alt){
+  const overlay = document.getElementById("imgOverlay");
+  const img = document.getElementById("overlayImg");
+  img.src = src;
+  img.alt = alt || "Full image";
+  overlay.classList.add("show");
+  overlay.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeImgOverlay(){
+  const overlay = document.getElementById("imgOverlay");
+  const img = document.getElementById("overlayImg");
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden","true");
+  img.src = "";
+  img.alt = "";
+  document.body.style.overflow = "";
+}
+
+// ESC đóng overlay + popup
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape"){
+    closeImgOverlay();
+    closeStage();
+  }
+});
+
+function openStage(id) {
+  const p = document.getElementById("popup");
+  const c = document.getElementById("popupContent");
+  const s = stageData[id];
+
+  const bulletsHtml = (s.bullets && s.bullets.length)
+    ? `<ul class="mt-2 list-disc list-inside space-y-1 opacity-90">
+        ${s.bullets.map(x=>`<li>${x}</li>`).join("")}
+       </ul>`
+    : "";
+
+  const linkHtml = (s.linkUrl && s.linkUrl !== "#")
+    ? `<a href="${s.linkUrl}" target="_blank" rel="noopener"
+         class="inline-flex items-center mt-4 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm font-semibold">
+        🔗 ${s.linkLabel || "Xem chi tiết"}
+       </a>`
+    : "";
+
+  const imgHtml = (s.image && s.image.trim())
+    ? `
+      <div class="popup-img-wrap">
+        <img
+          src="${s.image}"
+          alt="${s.title}"
+          class="popup-img"
+          onclick="openImgOverlay('${s.image}','${s.title}')"
+        />
+      </div>
+      <p class="text-xs opacity-60 text-center mt-2">Di chuột để phóng to • Click để xem full.</p>
+    `
+    : "";
+
+  c.innerHTML = `
+    <div class="space-y-4">
+      <button onclick="closeStage()"
+        class="float-right text-sm px-3 py-1 bg-gray-800 rounded-full hover:bg-gray-700 font-bold">
+        ✕ Đóng
+      </button>
+
+      <h2 class="text-2xl font-extrabold text-blue-300 mb-1">${s.title}</h2>
+      <p class="text-sm opacity-80">${s.subtitle || ""}</p>
+
+      ${imgHtml}
+
+      <div class="prose prose-sm prose-invert max-w-none leading-relaxed">
+        <p class="opacity-90">${s.summary || ""}</p>
+        ${bulletsHtml}
+      </div>
+
+      ${linkHtml}
+
+      <div class="pt-4 text-xs opacity-60">
+        Vì bầu trời, từ bầu trời – SKYWARD.
+      </div>
+    </div>
+  `;
+
+  p.classList.remove("hidden");
+}
+
+function closeStage() {
+  const p = document.getElementById("popup");
+  if (!p) return;
+  p.classList.add("hidden");
+}
+</script>
+
+</body>
+</html>

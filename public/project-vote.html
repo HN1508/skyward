@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SKYWARD • Voting Project</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    body { background:#0a0f18; color:#e6ecf5; }
+    .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(10px); }
+    .chip  { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
+    .divider { border-color: rgba(255,255,255,0.12); }
+    .card:hover { transform: translateY(-4px); transition: .2s; }
+
+    /* ✅ Ảnh full kích thước (không crop) */
+    .img-full{
+      width: 100%;
+      height: 320px;              /* desktop */
+      object-fit: contain;        /* giữ nguyên tỉ lệ, không cắt */
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      display:block;
+    }
+    @media (max-width: 640px){
+      .img-full{ height: 260px; } /* mobile */
+    }
+
+    #votePopup { backdrop-filter: blur(6px); }
+
+    .leader-row{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .rank-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:34px;height:34px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(59,130,246,0.16);
+      color: rgba(147,197,253,0.95);
+      font-weight:900;
+      flex: 0 0 auto;
+    }
+    .leader-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 0;
+    }
+    .leader-title{
+      font-weight:900;
+      color: rgba(191,219,254,0.95);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      max-width: 520px;
+    }
+    .leader-meta{
+      font-size:12px;
+      color: rgba(176,190,197,0.95);
+      margin-top: 2px;
+    }
+    .vote-pill{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.18);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    /* ✅ Info ảnh trong popup */
+    .vote-preview{
+      margin-top: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 10px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .vote-thumb{
+      width: 64px; height: 64px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      flex: 0 0 auto;
+    }
+    .vote-preview .t{
+      font-weight: 900;
+      color: rgba(191,219,254,0.95);
+      line-height: 1.2;
+    }
+    .vote-preview .d{
+      margin-top: 3px;
+      font-size: 12px;
+      color: rgba(176,190,197,0.95);
+      line-height: 1.35;
+    }
+
+    /* =========================
+       ✅ BACK BUTTON (giống mẫu)
+       ========================= */
+    .btn-back{
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 60;
+
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: rgba(226,232,240,.96);
+
+      font-weight: 900;
+      letter-spacing: .2px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.35);
+
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-back:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(147,197,253,.55);
+      filter: brightness(1.04);
+    }
+    .btn-back:active{ transform: translateY(0); }
+
+    .btn-back .icon{
+      width: 34px;
+      height: 34px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 999px;
+
+      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.40), rgba(59,130,246,.12));
+      border: 1px solid rgba(59,130,246,.35);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    @media (max-width: 640px){
+      .btn-back{
+        top: 14px;
+        left: 14px;
+        padding: 9px 12px;
+      }
+      .btn-back .icon{ width: 32px; height: 32px; }
+    }
+  </style>
+</head>
+
+<body class="pb-16">
+  <!-- ✅ Back button (giống mẫu) -->
+  <a href="index.html" class="btn-back" aria-label="Về trang chính">
+    <span class="icon">←</span>
+    <span>Về trang chính</span>
+  </a>
+
+  <!-- Header -->
+  <header class="max-w-5xl mx-auto px-6 pt-8">
+    <div class="flex items-center justify-between">
+      <a href="/" class="text-blue-300 font-bold tracking-wide">SKYWARD</a>
+      <div class="flex items-center space-x-2">
+        <span class="px-3 py-1 rounded-full text-xs chip">🗳️ Voting Project</span>
+        <span id="statusBadge" class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500 bg-opacity-20 border border-green-400 text-green-200">
+          🟢 Đang mở vote
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-6 pt-10 pb-8">
+    <div class="glass rounded-2xl p-8 md:p-10 shadow">
+      <p class="text-sm text-blue-200 opacity-90">SKYWARD PROJECT</p>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-blue-300 mt-2 leading-tight">
+        💙 VOTE ẢNH YÊU THÍCH
+      </h1>
+
+      <p class="mt-4 opacity-90 leading-relaxed max-w-3xl">
+        Sky vào xem ảnh và vote giúp tụi mình nha 🩵
+        Mỗi email chỉ vote <b>1 lần</b> (chống spam).
+      </p>
+
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">📌 Cách vote</div>
+          <div class="text-sm mt-2 opacity-90 space-y-1">
+            <div>• Chọn ảnh bạn thích</div>
+            <div>• Bấm Vote</div>
+            <div>• Nhập Gmail → gửi</div>
+          </div>
+        </div>
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">🔄 Realtime</div>
+          <div class="text-sm mt-2 opacity-90 space-y-1">
+            <div>• Số vote hiển thị trên từng ảnh</div>
+            <div>• Tự cập nhật mỗi 30s</div>
+          </div>
+        </div>
+        <div class="chip rounded-xl p-4">
+          <div class="text-sm opacity-75">🧾 Minh bạch</div>
+          <div class="text-sm mt-2 opacity-90 space-y-1">
+            <div>• Lưu timestamp + email + ảnh</div>
+            <div>• Có thể xuất báo cáo từ sheet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider my-8 max-w-5xl mx-auto"/>
+
+  <!-- Top 5 -->
+  <section class="max-w-5xl mx-auto px-6 pb-10" id="leaderboard">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-blue-300">🏆 Top 5 dẫn đầu</h2>
+      <div class="text-xs opacity-70">
+        Tổng vote: <b id="totalVotes">0</b>
+      </div>
+    </div>
+
+    <div class="mt-6 glass rounded-2xl p-6">
+      <div class="text-sm opacity-80">
+        Bảng xếp hạng tự cập nhật theo lượt vote realtime.
+      </div>
+
+      <div class="mt-4 space-y-3" id="topList"></div>
+
+      <div class="mt-5 text-xs opacity-70">
+        * Nếu ít hơn 5 ảnh, hệ thống sẽ hiển thị theo số ảnh hiện có.
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider my-8 max-w-5xl mx-auto"/>
+
+  <!-- Gallery -->
+  <section class="max-w-5xl mx-auto px-6 pb-12" id="gallery">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-blue-300">📸 Album vote</h2>
+      <button onclick="refreshCounts()" class="px-4 py-2 rounded-xl chip hover:bg-opacity-10 font-semibold text-sm">
+        🔄 Làm mới vote
+      </button>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="grid"></div>
+
+    <div class="mt-6 text-xs opacity-70">
+      * Nếu bạn thấy vote chưa cập nhật ngay, đợi 5–10s hoặc bấm “Làm mới vote”.
+    </div>
+  </section>
+
+  <footer class="max-w-5xl mx-auto px-6 pt-8 text-center text-xs opacity-60">
+    💙 From Skyward & Sky with love
+  </footer>
+
+  <!-- Vote Popup -->
+  <div id="votePopup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6">
+    <div class="max-w-md mx-auto bg-gray-900 p-6 rounded-2xl shadow-xl border border-gray-700">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h3 class="text-xl font-bold text-blue-200">🗳️ Vote ảnh</h3>
+          <p class="text-sm opacity-80 mt-1" id="voteSubtitle">—</p>
+        </div>
+        <button onclick="closeVote()" class="px-3 py-1 rounded-full chip hover:bg-opacity-10 text-sm font-semibold">✕</button>
+      </div>
+
+      <!-- ✅ Info ảnh đang vote -->
+      <div class="vote-preview" id="votePreview" style="display:none;">
+        <img class="vote-thumb" id="voteThumb" src="" alt="" />
+        <div style="min-width:0">
+          <div class="t" id="voteName">—</div>
+          <div class="d" id="voteNote">—</div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <label class="text-sm opacity-80">Nhập Gmail của bạn</label>
+        <input id="emailInput" type="email" placeholder="yourname@gmail.com"
+          class="mt-2 w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-400"/>
+        <div class="text-xs opacity-70 mt-2">
+          * Vote của bạn sẽ được lưu: <b>email + ảnh đã chọn + thời gian</b>.
+        </div>
+      </div>
+
+      <div class="mt-5 flex gap-3">
+        <button onclick="submitVote()" class="flex-1 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+          ✅ Gửi vote
+        </button>
+        <button onclick="closeVote()" class="px-5 py-3 rounded-xl chip hover:bg-opacity-10 font-semibold">
+          Huỷ
+        </button>
+      </div>
+
+      <div class="mt-4 text-sm" id="voteMsg"></div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // CONFIG
+    // =========================
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWnMYTBjI5KCkGPqJIM1kOaps_66kStqId0ErDuFqMgx5mxM-tYDFT_MXJKfbc9_F2/exec";
+    const AUTO_REFRESH_MS = 30000;
+
+    const IMAGES = [
+      { id: "img1", title: "Phương Nguyên", src: "images/vote/phuongnguyen.jpg", note: "Ảnh của Phương Nguyên" },
+      { id: "img2", title: "Ngọc Liên",   src: "images/vote/ngoclien.jpg",   note: "Ảnh của Ngọc Liên" },
+      { id: "img3", title: "Thanh Nhàn",  src: "images/vote/thanhnhan.jpg",  note: "Ảnh của Thanh Nhàn" },
+    ];
+
+    // =========================
+    // STATE
+    // =========================
+    let selectedImageId = null;
+    let selectedImageTitle = null;
+    let selectedImageSrc = null;
+    let selectedImageNote = null;
+
+    let countsCache = {}; // {img1: n, img2: n...}
+
+    function getImgById(id){
+      return IMAGES.find(x => x.id === id) || null;
+    }
+
+    // =========================
+    // CALC
+    // =========================
+    function getVotes(id){
+      return Number(countsCache[id]) || 0;
+    }
+    function getTotalVotes() {
+      return IMAGES.reduce((sum, img) => sum + getVotes(img.id), 0);
+    }
+    function getSortedByVotesDesc() {
+      return IMAGES
+        .map(img => ({ ...img, votes: getVotes(img.id) }))
+        .sort((a,b) => b.votes - a.votes);
+    }
+
+    // =========================
+    // RENDER: TOP 5
+    // =========================
+    function renderTop5(){
+      const total = getTotalVotes();
+      const topList = document.getElementById("topList");
+      document.getElementById("totalVotes").textContent = total.toLocaleString("vi-VN");
+
+      const sorted = getSortedByVotesDesc();
+      const top5 = sorted.slice(0, 5);
+
+      if (!top5.length) {
+        topList.innerHTML = `<div class="text-sm opacity-80">Chưa có dữ liệu vote.</div>`;
+        return;
+      }
+
+      topList.innerHTML = top5.map((x, idx) => {
+        const rank = idx + 1;
+        const pct = (total > 0) ? Math.round((x.votes / total) * 100) : 0;
+
+        return `
+          <div class="leader-row">
+            <div class="leader-left">
+              <div class="rank-pill">#${rank}</div>
+              <div style="min-width:0">
+                <div class="leader-title" title="${escapeHtml(x.title)}">${escapeHtml(x.title)}</div>
+                <div class="leader-meta">🩵 ${pct}% trên tổng vote</div>
+              </div>
+            </div>
+            <div class="vote-pill">🗳️ ${x.votes.toLocaleString("vi-VN")} vote</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================
+    // RENDER: GRID
+    // =========================
+    function renderGrid() {
+      const grid = document.getElementById("grid");
+
+      grid.innerHTML = IMAGES.map(img => {
+        const count = getVotes(img.id);
+
+        return `
+          <div class="card glass rounded-2xl p-5">
+            <img class="img-full" src="${img.src}" alt="${escapeHtml(img.title)}" />
+            <div class="mt-4 flex items-start justify-between gap-3">
+              <div style="min-width:0">
+                <div class="font-bold text-blue-200">${escapeHtml(img.title)}</div>
+                ${img.note ? `<div class="text-sm opacity-80 mt-1">${escapeHtml(img.note)}</div>` : ``}
+              </div>
+              <div class="chip px-3 py-1 text-xs font-bold whitespace-nowrap">
+                🩵 <span id="count_${img.id}">${count}</span> vote
+              </div>
+            </div>
+
+            <button
+              onclick="openVote('${img.id}')"
+              class="mt-4 w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+              Vote ảnh này
+            </button>
+          </div>
+        `;
+      }).join("");
+
+      renderTop5();
+    }
+
+    // =========================
+    // POPUP
+    // =========================
+    function openVote(imageId) {
+      const img = getImgById(imageId);
+      if (!img) return;
+
+      selectedImageId = img.id;
+      selectedImageTitle = img.title;
+      selectedImageSrc = img.src;
+      selectedImageNote = img.note || "";
+
+      document.getElementById("voteSubtitle").textContent = `Bạn đang vote cho: ${img.title}`;
+
+      // ✅ fill preview
+      const preview = document.getElementById("votePreview");
+      const thumb = document.getElementById("voteThumb");
+      const name = document.getElementById("voteName");
+      const note = document.getElementById("voteNote");
+
+      if (preview) preview.style.display = "";
+      if (thumb) { thumb.src = img.src; thumb.alt = img.title; }
+      if (name) name.textContent = img.title;
+      if (note) note.textContent = img.note ? img.note : "—";
+
+      document.getElementById("emailInput").value = "";
+      document.getElementById("voteMsg").textContent = "";
+      document.getElementById("voteMsg").className = "mt-4 text-sm";
+
+      document.getElementById("votePopup").classList.remove("hidden");
+    }
+
+    function closeVote() {
+      document.getElementById("votePopup").classList.add("hidden");
+      selectedImageId = null;
+      selectedImageTitle = null;
+      selectedImageSrc = null;
+      selectedImageNote = null;
+    }
+
+    document.getElementById("votePopup").addEventListener("click", (e) => {
+      if (e.target.id === "votePopup") closeVote();
+    });
+
+    // =========================
+    // SUBMIT VOTE
+    // =========================
+    function isGmail(email) {
+      const v = (email || "").trim().toLowerCase();
+      return /^[a-z0-9._%+-]+@(gmail\.com|googlemail\.com)$/.test(v);
+    }
+
+    async function submitVote() {
+      const msg = document.getElementById("voteMsg");
+      const email = document.getElementById("emailInput").value.trim().toLowerCase();
+
+      if (!selectedImageId) {
+        msg.className = "mt-4 text-sm text-red-300";
+        msg.textContent = "Lỗi: chưa chọn ảnh.";
+        return;
+      }
+      if (!isGmail(email)) {
+        msg.className = "mt-4 text-sm text-red-300";
+        msg.textContent = "Vui lòng nhập Gmail hợp lệ (…@gmail.com).";
+        return;
+      }
+
+      try {
+        msg.className = "mt-4 text-sm text-blue-200";
+        msg.textContent = "Đang gửi vote...";
+
+        const payload = { email, image_id: selectedImageId };
+
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json().catch(() => null);
+        if (!data || data.ok !== true) {
+          const err = (data && data.error) ? data.error : "Gửi thất bại.";
+          msg.className = "mt-4 text-sm text-red-300";
+          msg.textContent = err;
+          return;
+        }
+
+        msg.className = "mt-4 text-sm text-green-300";
+        msg.textContent = "Vote thành công! Cảm ơn bạn 🩵";
+
+        await refreshCounts();
+        setTimeout(closeVote, 900);
+      } catch (e) {
+        console.error(e);
+        msg.className = "mt-4 text-sm text-red-300";
+        msg.textContent = "Lỗi mạng / CORS. Kiểm tra Web App access = Anyone.";
+      }
+    }
+
+    // =========================
+    // FETCH COUNTS
+    // =========================
+    async function refreshCounts() {
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, { cache: "no-store" });
+        const data = await res.json().catch(() => null);
+
+        if (data && data.ok === true && data.counts) {
+          countsCache = data.counts;
+        }
+        renderGrid();
+      } catch (e) {
+        console.error("refreshCounts error:", e);
+        renderGrid();
+      }
+    }
+
+    // =========================
+    // HELPERS
+    // =========================
+    function escapeHtml(s) {
+      return String(s || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    // =========================
+    // INIT
+    // =========================
+    (async function init(){
+      await refreshCounts();
+      setInterval(refreshCounts, AUTO_REFRESH_MS);
+    })();
+  </script>
+</body>
+</html>
