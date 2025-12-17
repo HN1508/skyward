@@ -12,22 +12,21 @@
     .chip  { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
     .divider { border-color: rgba(255,255,255,0.12); }
     .card:hover { transform: translateY(-4px); transition: .2s; }
+    #votePopup { backdrop-filter: blur(6px); }
 
     /* ✅ Ảnh full kích thước (không crop) */
     .img-full{
       width: 100%;
-      height: 320px;              /* desktop */
-      object-fit: contain;        /* giữ nguyên tỉ lệ, không cắt */
+      height: 320px;
+      object-fit: contain;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
       display:block;
     }
     @media (max-width: 640px){
-      .img-full{ height: 260px; } /* mobile */
+      .img-full{ height: 260px; }
     }
-
-    #votePopup { backdrop-filter: blur(6px); }
 
     .leader-row{
       border-radius: 14px;
@@ -173,7 +172,7 @@
 </head>
 
 <body class="pb-16">
-  <!-- ✅ Back button (giống mẫu) -->
+  <!-- ✅ Back button -->
   <a href="index.html" class="btn-back" aria-label="Về trang chính">
     <span class="icon">←</span>
     <span>Về trang chính</span>
@@ -202,7 +201,7 @@
 
       <p class="mt-4 opacity-90 leading-relaxed max-w-3xl">
         Sky vào xem ảnh và vote giúp tụi mình nha 🩵
-        Mỗi email chỉ vote <b>1 lần</b> (chống spam).
+        <b>Mỗi email có thể đổi vote</b> (vote lại sẽ tự cập nhật sang ảnh mới).
       </p>
 
       <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -225,7 +224,7 @@
           <div class="text-sm opacity-75">🧾 Minh bạch</div>
           <div class="text-sm mt-2 opacity-90 space-y-1">
             <div>• Lưu timestamp + email + ảnh</div>
-            <div>• Có thể xuất báo cáo từ sheet</div>
+            <div>• Vote lại sẽ update ảnh</div>
           </div>
         </div>
       </div>
@@ -302,13 +301,18 @@
         <label class="text-sm opacity-80">Nhập Gmail của bạn</label>
         <input id="emailInput" type="email" placeholder="yourname@gmail.com"
           class="mt-2 w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-400"/>
-        <div class="text-xs opacity-70 mt-2">
-          * Vote của bạn sẽ được lưu: <b>email + ảnh đã chọn + thời gian</b>.
+
+        <!-- ✅ CHỈ HIỆN KHI EMAIL ĐÃ DÙNG -->
+        <div id="changeHint" class="text-xs opacity-70 mt-2 hidden">
+          * <b>Vote lại bằng email này</b> sẽ <b>đổi sang ảnh mới</b> (không tạo vote mới).
         </div>
+
+        <!-- (tuỳ chọn) thông báo email từng vote cho ảnh nào -->
+        <div id="usedInfo" class="text-xs opacity-60 mt-1 hidden"></div>
       </div>
 
       <div class="mt-5 flex gap-3">
-        <button onclick="submitVote()" class="flex-1 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+        <button id="submitBtn" onclick="submitVote()" class="flex-1 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
           ✅ Gửi vote
         </button>
         <button onclick="closeVote()" class="px-5 py-3 rounded-xl chip hover:bg-opacity-10 font-semibold">
@@ -324,7 +328,7 @@
     // =========================
     // CONFIG
     // =========================
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWnMYTBjI5KCkGPqJIM1kOaps_66kStqId0ErDuFqMgx5mxM-tYDFT_MXJKfbc9_F2/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyW21TNlVMNLp0Yj4JHSwc-m141GJleC_2i7-kqIjla0k-Y7GhI6fV1ffPLMh2sjE5M/exec";
     const AUTO_REFRESH_MS = 30000;
 
     const IMAGES = [
@@ -342,6 +346,11 @@
     let selectedImageNote = null;
 
     let countsCache = {}; // {img1: n, img2: n...}
+
+    // Email check state
+    let emailUsed = false;
+    let emailUsedImageId = "";
+    let emailCheckTimer = null;
 
     function getImgById(id){
       return IMAGES.find(x => x.id === id) || null;
@@ -434,6 +443,33 @@
     // =========================
     // POPUP
     // =========================
+    function setEmailHintUI(used, usedImageId){
+      const hint = document.getElementById("changeHint");
+      const info = document.getElementById("usedInfo");
+
+      emailUsed = !!used;
+      emailUsedImageId = usedImageId || "";
+
+      // ✅ đúng yêu cầu: chỉ hiện hint khi email đã dùng
+      if (emailUsed) hint.classList.remove("hidden");
+      else hint.classList.add("hidden");
+
+      // (tuỳ chọn) show "đã vote cho ..." khi used
+      if (emailUsed && emailUsedImageId) {
+        const old = getImgById(emailUsedImageId);
+        if (old) {
+          info.classList.remove("hidden");
+          info.textContent = `Email này đã từng vote cho: ${old.title}.`;
+        } else {
+          info.classList.add("hidden");
+          info.textContent = "";
+        }
+      } else {
+        info.classList.add("hidden");
+        info.textContent = "";
+      }
+    }
+
     function openVote(imageId) {
       const img = getImgById(imageId);
       if (!img) return;
@@ -456,11 +492,17 @@
       if (name) name.textContent = img.title;
       if (note) note.textContent = img.note ? img.note : "—";
 
-      document.getElementById("emailInput").value = "";
+      const emailEl = document.getElementById("emailInput");
+      emailEl.value = "";
+
+      // reset hint (ẩn)
+      setEmailHintUI(false, "");
+
       document.getElementById("voteMsg").textContent = "";
       document.getElementById("voteMsg").className = "mt-4 text-sm";
 
       document.getElementById("votePopup").classList.remove("hidden");
+      emailEl.focus();
     }
 
     function closeVote() {
@@ -469,14 +511,32 @@
       selectedImageTitle = null;
       selectedImageSrc = null;
       selectedImageNote = null;
+      setEmailHintUI(false, "");
     }
 
     document.getElementById("votePopup").addEventListener("click", (e) => {
       if (e.target.id === "votePopup") closeVote();
     });
 
+    // ✅ check email realtime (debounce)
+    document.getElementById("emailInput").addEventListener("input", () => {
+      clearTimeout(emailCheckTimer);
+
+      const email = document.getElementById("emailInput").value.trim().toLowerCase();
+
+      // reset UI trước
+      setEmailHintUI(false, "");
+
+      if (!isGmail(email)) return;
+
+      emailCheckTimer = setTimeout(async () => {
+        const info = await checkEmailUsed(email);
+        setEmailHintUI(info.used, info.image_id);
+      }, 450);
+    });
+
     // =========================
-    // SUBMIT VOTE
+    // SUBMIT VOTE (UPSERT)
     // =========================
     function isGmail(email) {
       const v = (email || "").trim().toLowerCase();
@@ -485,6 +545,7 @@
 
     async function submitVote() {
       const msg = document.getElementById("voteMsg");
+      const btn = document.getElementById("submitBtn");
       const email = document.getElementById("emailInput").value.trim().toLowerCase();
 
       if (!selectedImageId) {
@@ -501,7 +562,10 @@
       try {
         msg.className = "mt-4 text-sm text-blue-200";
         msg.textContent = "Đang gửi vote...";
+        btn.disabled = true;
+        btn.textContent = "Đang gửi...";
 
+        // ✅ upsert: server sẽ tự insert/update theo email
         const payload = { email, image_id: selectedImageId };
 
         const res = await fetch(APPS_SCRIPT_URL, {
@@ -511,6 +575,7 @@
         });
 
         const data = await res.json().catch(() => null);
+
         if (!data || data.ok !== true) {
           const err = (data && data.error) ? data.error : "Gửi thất bại.";
           msg.className = "mt-4 text-sm text-red-300";
@@ -518,8 +583,15 @@
           return;
         }
 
+        // ✅ mode: "created" | "updated"
+        const mode = (data && data.mode) ? String(data.mode).toLowerCase() : "";
+
         msg.className = "mt-4 text-sm text-green-300";
-        msg.textContent = "Vote thành công! Cảm ơn bạn 🩵";
+        if (mode === "updated") {
+          msg.textContent = "Đã đổi vote thành công! 🩵";
+        } else {
+          msg.textContent = "Vote thành công! Cảm ơn bạn 🩵";
+        }
 
         await refreshCounts();
         setTimeout(closeVote, 900);
@@ -527,6 +599,29 @@
         console.error(e);
         msg.className = "mt-4 text-sm text-red-300";
         msg.textContent = "Lỗi mạng / CORS. Kiểm tra Web App access = Anyone.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "✅ Gửi vote";
+      }
+    }
+
+    // =========================
+    // CHECK EMAIL USED
+    // expects: {ok:true, used:true/false, image_id:"img1"}  (image_id optional)
+    // =========================
+    async function checkEmailUsed(email){
+      try{
+        const url = APPS_SCRIPT_URL + "?check=" + encodeURIComponent(email);
+        const res = await fetch(url, { cache: "no-store" });
+        const data = await res.json().catch(() => null);
+        if (!data || data.ok !== true) return { used:false, image_id:"" };
+        return {
+          used: !!data.used,
+          image_id: (data.image_id ? String(data.image_id) : "")
+        };
+      } catch(e){
+        console.error("checkEmailUsed error:", e);
+        return { used:false, image_id:"" };
       }
     }
 
