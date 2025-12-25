@@ -1,647 +1,280 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SKYWARD • Voting Project</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SKYWARD • Vote Ảnh</title>
 
-  <style>
-    body { background:#0a0f18; color:#e6ecf5; }
-    .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(10px); }
-    .chip  { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
-    .divider { border-color: rgba(255,255,255,0.12); }
-    .card:hover { transform: translateY(-4px); transition: .2s; }
-    #votePopup { backdrop-filter: blur(6px); }
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-    .img-full{
-      width: 100%;
-      height: 320px;
-      object-fit: contain;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      display:block;
-    }
-    @media (max-width: 640px){
-      .img-full{ height: 260px; }
-    }
-
-    .leader-row{
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .rank-pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:34px;height:34px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(59,130,246,0.16);
-      color: rgba(147,197,253,0.95);
-      font-weight:900;
-      flex: 0 0 auto;
-    }
-    .leader-left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width: 0;
-    }
-    .leader-title{
-      font-weight:900;
-      color: rgba(191,219,254,0.95);
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      max-width: 520px;
-    }
-    .leader-meta{
-      font-size:12px;
-      color: rgba(176,190,197,0.95);
-      margin-top: 2px;
-    }
-    .vote-pill{
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.18);
-      font-size: 12px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .vote-preview{
-      margin-top: 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-      padding: 10px;
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-    }
-    .vote-thumb{
-      width: 64px; height: 64px;
-      object-fit: cover;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      flex: 0 0 auto;
-    }
-    .vote-preview .t{
-      font-weight: 900;
-      color: rgba(191,219,254,0.95);
-      line-height: 1.2;
-    }
-    .vote-preview .d{
-      margin-top: 3px;
-      font-size: 12px;
-      color: rgba(176,190,197,0.95);
-      line-height: 1.35;
-    }
-
-    .btn-back{
-      position: fixed;
-      top: 18px;
-      left: 18px;
-      z-index: 60;
-
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: rgba(226,232,240,.96);
-
-      font-weight: 900;
-      letter-spacing: .2px;
-      box-shadow: 0 14px 34px rgba(0,0,0,.35);
-
-      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
-      white-space: nowrap;
-      text-decoration: none;
-    }
-    .btn-back:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.09);
-      border-color: rgba(147,197,253,.55);
-      filter: brightness(1.04);
-    }
-    .btn-back:active{ transform: translateY(0); }
-
-    .btn-back .icon{
-      width: 34px;
-      height: 34px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      border-radius: 999px;
-
-      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.40), rgba(59,130,246,.12));
-      border: 1px solid rgba(59,130,246,.35);
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    @media (max-width: 640px){
-      .btn-back{
-        top: 14px;
-        left: 14px;
-        padding: 9px 12px;
-      }
-      .btn-back .icon{ width: 32px; height: 32px; }
-    }
-  </style>
+<style>
+body{background:#0a0f18;color:#e6ecf5}
+.glass{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px)}
+.card:hover{transform:translateY(-4px);transition:.2s}
+.img-full{width:100%;height:300px;object-fit:contain;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
+@media(max-width:640px){.img-full{height:240px}}
+.selected{outline:2px solid rgba(59,130,246,.9);box-shadow:0 0 0 6px rgba(59,130,246,.15)}
+.disabled{opacity:.45;filter:grayscale(.3);cursor:not-allowed}
+.badge{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,.35);font-weight:900}
+.thumb{width:44px;height:44px;border-radius:12px;object-fit:cover;border:1px solid rgba(255,255,255,.2)}
+.submit-bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.12);padding:12px}
+.rank{width:34px;height:34px;border-radius:999px;background:rgba(59,130,246,.25);display:flex;align-items:center;justify-content:center;font-weight:900}
+.chip{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+</style>
 </head>
 
-<body class="pb-16">
-  <a href="index.html" class="btn-back" aria-label="Về trang chính">
-    <span class="icon">←</span>
-    <span>Về trang chính</span>
-  </a>
+<body class="pb-28">
 
-  <header class="max-w-5xl mx-auto px-6 pt-8">
-    <div class="flex items-center justify-between">
-      <a href="/" class="text-blue-300 font-bold tracking-wide">SKYWARD</a>
-      <div class="flex items-center space-x-2">
-        <span class="px-3 py-1 rounded-full text-xs chip">🗳️ Voting Project</span>
-        <span id="statusBadge" class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500 bg-opacity-20 border border-green-400 text-green-200">
-          🟢 Đang mở vote
-        </span>
-      </div>
+<header class="max-w-5xl mx-auto px-6 pt-8">
+  <h1 class="text-3xl font-extrabold text-blue-300">💙 VOTE 5 ẢNH YÊU THÍCH</h1>
+  <p class="mt-2 opacity-80">
+    Chọn <b>đúng 5 ảnh</b>. Mỗi người <b>chỉ được gửi 1 lần</b>.
+  </p>
+
+  <div class="mt-4 flex gap-3 flex-wrap">
+    <div class="chip px-4 py-2 rounded-xl text-sm font-semibold">
+      Đã chọn: <b id="pickedCount">0</b>/5
     </div>
-  </header>
+    <button id="clearBtn" class="chip px-4 py-2 rounded-xl text-sm font-semibold">
+      🧹 Xoá chọn
+    </button>
+  </div>
+</header>
 
-  <section class="max-w-5xl mx-auto px-6 pt-10 pb-8">
-    <div class="glass rounded-2xl p-8 md:p-10 shadow">
-      <p class="text-sm text-blue-200 opacity-90">SKYWARD PROJECT</p>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-blue-300 mt-2 leading-tight">
-        💙 VOTE ẢNH YÊU THÍCH
-      </h1>
-
-      <p class="mt-4 opacity-90 leading-relaxed max-w-3xl">
-        Sky vào xem ảnh và vote giúp tụi mình nha 🩵
-        <b>Mỗi email có thể đổi vote</b> (vote lại sẽ tự cập nhật sang ảnh mới).
-      </p>
-
-      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="chip rounded-xl p-4">
-          <div class="text-sm opacity-75">📌 Cách vote</div>
-          <div class="text-sm mt-2 opacity-90 space-y-1">
-            <div>• Chọn ảnh bạn thích</div>
-            <div>• Bấm Vote</div>
-            <div>• Nhập Gmail → gửi</div>
-          </div>
-        </div>
-        <div class="chip rounded-xl p-4">
-          <div class="text-sm opacity-75">🔄 Realtime</div>
-          <div class="text-sm mt-2 opacity-90 space-y-1">
-            <div>• Số vote hiển thị trên từng ảnh</div>
-            <div>• Tự cập nhật mỗi 30s</div>
-          </div>
-        </div>
-        <div class="chip rounded-xl p-4">
-          <div class="text-sm opacity-75">🧾 Minh bạch</div>
-          <div class="text-sm mt-2 opacity-90 space-y-1">
-            <div>• Lưu timestamp + email + ảnh</div>
-            <div>• Vote lại sẽ update ảnh</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider my-8 max-w-5xl mx-auto"/>
-
-  <section class="max-w-5xl mx-auto px-6 pb-10" id="leaderboard">
-    <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-blue-300">🏆 Top 5 dẫn đầu</h2>
-      <div class="text-xs opacity-70">
-        Tổng vote: <b id="totalVotes">0</b>
-      </div>
-    </div>
-
-    <div class="mt-6 glass rounded-2xl p-6">
-      <div class="text-sm opacity-80">
-        Bảng xếp hạng tự cập nhật theo lượt vote realtime.
-      </div>
-
-      <div class="mt-4 space-y-3" id="topList"></div>
-
-      <div class="mt-5 text-xs opacity-70">
-        * Nếu ít hơn 5 ảnh, hệ thống sẽ hiển thị theo số ảnh hiện có.
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider my-8 max-w-5xl mx-auto"/>
-
-  <section class="max-w-5xl mx-auto px-6 pb-12" id="gallery">
-    <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-blue-300">📸 Album vote</h2>
-      <button onclick="refreshCounts()" class="px-4 py-2 rounded-xl chip hover:bg-opacity-10 font-semibold text-sm">
-        🔄 Làm mới vote
-      </button>
-    </div>
-
-    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="grid"></div>
-
-    <div class="mt-6 text-xs opacity-70">
-      * Nếu bạn thấy vote chưa cập nhật ngay, đợi 5–10s hoặc bấm “Làm mới vote”.
-    </div>
-  </section>
-
-  <footer class="max-w-5xl mx-auto px-6 pt-8 text-center text-xs opacity-60">
-    💙 From Skyward & Sky with love
-  </footer>
-
-  <div id="votePopup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6">
-    <div class="max-w-md mx-auto bg-gray-900 p-6 rounded-2xl shadow-xl border border-gray-700">
-      <div class="flex items-start justify-between gap-3">
-        <div>
-          <h3 class="text-xl font-bold text-blue-200">🗳️ Vote ảnh</h3>
-          <p class="text-sm opacity-80 mt-1" id="voteSubtitle">—</p>
-        </div>
-        <button onclick="closeVote()" class="px-3 py-1 rounded-full chip hover:bg-opacity-10 text-sm font-semibold">✕</button>
-      </div>
-
-      <div class="vote-preview" id="votePreview" style="display:none;">
-        <img class="vote-thumb" id="voteThumb" src="" alt="" />
-        <div style="min-width:0">
-          <div class="t" id="voteName">—</div>
-          <div class="d" id="voteNote">—</div>
-        </div>
-      </div>
-
-      <div class="mt-5">
-        <label class="text-sm opacity-80">Nhập Gmail của bạn</label>
-        <input id="emailInput" type="email" placeholder="yourname@gmail.com"
-          class="mt-2 w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-400"/>
-
-        <div id="changeHint" class="text-xs opacity-70 mt-2 hidden">
-          * <b>Vote lại bằng email này</b> sẽ <b>đổi sang ảnh mới</b> (không tạo vote mới).
-        </div>
-
-        <div id="usedInfo" class="text-xs opacity-60 mt-1 hidden"></div>
-      </div>
-
-      <div class="mt-5 flex gap-3">
-        <button id="submitBtn" onclick="submitVote()" class="flex-1 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
-          ✅ Gửi vote
-        </button>
-        <button onclick="closeVote()" class="px-5 py-3 rounded-xl chip hover:bg-opacity-10 font-semibold">
-          Huỷ
-        </button>
-      </div>
-
-      <div class="mt-4 text-sm" id="voteMsg"></div>
-    </div>
+<!-- BXH -->
+<section class="max-w-5xl mx-auto px-6 mt-10">
+  <h2 class="text-2xl font-bold text-blue-300">🏆 Top 5 ảnh nhiều vote</h2>
+  <div class="text-xs opacity-70 mt-1">
+    Tổng vote: <b id="totalVotes">0</b>
   </div>
 
-  <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyW21TNlVMNLp0Yj4JHSwc-m141GJleC_2i7-kqIjla0k-Y7GhI6fV1ffPLMh2sjE5M/exec";
-    const AUTO_REFRESH_MS = 30000;
+  <div id="topList" class="mt-4 glass rounded-2xl p-6 space-y-3"></div>
+</section>
 
-    // ✅ list.txt nằm đúng path này
-    const IMAGES_LIST_TXT = "images/vote/list.txt";
+<hr class="my-10 border-gray-700 max-w-5xl mx-auto">
 
-    // =========================
-    // STATE
-    // =========================
-    let IMAGES = [];
+<!-- GALLERY -->
+<section class="max-w-5xl mx-auto px-6">
+  <h2 class="text-2xl font-bold text-blue-300">📸 Album</h2>
+  <div id="grid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+</section>
 
-    let selectedImageId = null;
-    let selectedImageTitle = null;
-    let selectedImageSrc = null;
-    let selectedImageNote = null;
+<footer class="text-center text-xs opacity-60 mt-10">💙 Skyward</footer>
 
-    let countsCache = {}; // {image_id: n, ...}
+<!-- SUBMIT BAR -->
+<div id="submitBar" class="submit-bar hidden">
+  <div class="max-w-5xl mx-auto flex justify-between items-center gap-4">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="chip px-3 py-2 rounded-xl font-semibold">✅ Đã chọn 5/5</span>
+      <div id="thumbBar" class="flex gap-2 overflow-x-auto"></div>
+    </div>
+    <button id="openPopupBtn"
+      class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+      Gửi vote
+    </button>
+  </div>
+</div>
 
-    let emailUsed = false;
-    let emailUsedImageId = "";
-    let emailCheckTimer = null;
+<!-- POPUP -->
+<div id="popup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6" style="z-index:60;">
+  <div class="max-w-md mx-auto bg-gray-900 p-6 rounded-2xl border border-gray-700">
+    <div class="flex justify-between items-start">
+      <h3 class="text-xl font-bold text-blue-200">🗳️ Xác nhận vote</h3>
+      <button id="closePopupBtn" class="chip px-3 py-1 rounded-full">✕</button>
+    </div>
 
-    function getImgById(id){
-      return IMAGES.find(x => x.id === id) || null;
+    <div class="mt-4">
+      <div class="text-sm opacity-80 mb-2">5 ảnh đã chọn:</div>
+      <div id="thumbPopup" class="flex gap-2 flex-wrap"></div>
+    </div>
+
+    <div class="mt-5">
+      <label class="text-sm opacity-80">Chọn người vote</label>
+      <select id="voter"
+        class="mt-2 w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700">
+        <option value="">— chọn —</option>
+        <option value="1">Nhung Nhung</option>
+        <option value="2">Thúy Nga</option>
+        <option value="3">Chu</option>
+        <option value="4">Hoàng Thảo</option>
+        <option value="5">June</option>
+      </select>
+    </div>
+
+    <div class="mt-5 flex gap-3">
+      <button id="submitBtn"
+        class="flex-1 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
+        Gửi
+      </button>
+      <button id="cancelBtn" class="px-5 py-3 rounded-xl chip">Huỷ</button>
+    </div>
+
+    <div id="msg" class="mt-3 text-sm"></div>
+  </div>
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+const API  = "https://script.google.com/macros/s/AKfycbx-W3DLuqnkZwK9fd-ROKW68OXSuIzbqxvYalV7dViITOV9ifyBMybe9P2kk0ko-BV-/exec"; // 👈 thay link /exec
+const LIST = "images/vote/list.txt";
+
+/* ================= DOM ================= */
+const elGrid = document.getElementById("grid");
+const elPickedCount = document.getElementById("pickedCount");
+const elSubmitBar = document.getElementById("submitBar");
+const elThumbBar = document.getElementById("thumbBar");
+const elThumbPopup = document.getElementById("thumbPopup");
+const elPopup = document.getElementById("popup");
+const elMsg = document.getElementById("msg");
+const elVoter = document.getElementById("voter");
+const elSubmitBtn = document.getElementById("submitBtn");
+const elTotalVotes = document.getElementById("totalVotes");
+const elTopList = document.getElementById("topList");
+
+document.getElementById("openPopupBtn").onclick = openPopup;
+document.getElementById("closePopupBtn").onclick = closePopup;
+document.getElementById("cancelBtn").onclick = closePopup;
+document.getElementById("clearBtn").onclick = clearPicked;
+elSubmitBtn.onclick = submitVote;
+
+/* ================= STATE ================= */
+let IMAGES = [];
+let picked = [];
+let counts = {};
+
+/* ================= LOGIC ================= */
+function baseName(f){return f.replace(/\.[^.]+$/,"")}
+
+async function loadImages(){
+  const t = await fetch(LIST,{cache:"no-store"}).then(r=>r.text());
+  IMAGES = t.split(/\r?\n/).filter(Boolean).map(f=>({
+    id: baseName(f),
+    src: "images/vote/" + f
+  }));
+}
+
+function togglePick(id){
+  const i = picked.indexOf(id);
+  if(i>=0) picked.splice(i,1);
+  else if(picked.length<5) picked.push(id);
+  updateUI();
+}
+
+function clearPicked(){
+  picked=[];
+  updateUI();
+}
+
+function updateUI(){
+  elPickedCount.textContent = picked.length;
+  elSubmitBar.classList.toggle("hidden", picked.length!==5);
+
+  const imgs = picked.map(id=>IMAGES.find(x=>x.id===id)).filter(Boolean);
+  elThumbBar.innerHTML = imgs.map(x=>`<img class="thumb" src="${x.src}">`).join("");
+  elThumbPopup.innerHTML = imgs.map(x=>`<img class="thumb" src="${x.src}">`).join("");
+
+  renderGrid();
+}
+
+function renderGrid(){
+  const lock = picked.length===5;
+  elGrid.innerHTML = IMAGES.map(img=>{
+    const sel = picked.includes(img.id);
+    const dis = lock && !sel;
+    return `
+      <div class="glass p-5 rounded-2xl card ${sel?"selected":""} ${dis?"disabled":""}"
+           ${dis?"":"onclick=\"togglePick('"+img.id+"')\""}>
+        <div class="flex justify-between mb-2">
+          <span class="text-xs opacity-70">${img.id}</span>
+          ${sel?`<div class="badge">✓</div>`:""}
+        </div>
+        <img class="img-full" src="${img.src}">
+      </div>`;
+  }).join("");
+}
+
+function openPopup(){
+  if(picked.length!==5) return;
+  elMsg.textContent="";
+  elVoter.value="";
+  elPopup.classList.remove("hidden");
+}
+function closePopup(){elPopup.classList.add("hidden")}
+
+/* ================= SUBMIT (GET – NO CORS) ================= */
+async function submitVote(){
+  const voter = elVoter.value;
+  if(!["1","2","3","4","5"].includes(voter)){
+    elMsg.textContent="Vui lòng chọn người vote (1–5)";
+    elMsg.className="mt-3 text-sm text-red-300";
+    return;
+  }
+
+  try{
+    elMsg.textContent="Đang gửi...";
+    elMsg.className="mt-3 text-sm text-blue-200";
+    elSubmitBtn.disabled=true;
+
+    const url = API
+      + "?action=vote"
+      + "&voter=" + encodeURIComponent(voter)
+      + "&images=" + encodeURIComponent(picked.join(","));
+
+    const data = await fetch(url,{cache:"no-store"}).then(r=>r.json());
+
+    if(!data.ok){
+      elMsg.textContent=data.error||"Gửi thất bại";
+      elMsg.className="mt-3 text-sm text-red-300";
+      return;
     }
 
-    function baseName(file){
-      const s = String(file || "").trim();
-      return s.replace(/\.[^.]+$/, "");
-    }
+    elMsg.textContent="Gửi thành công! 🩵";
+    elMsg.className="mt-3 text-sm text-green-300";
 
-    // ✅ Load ảnh từ list.txt
-    async function loadImagesFromListTxt(){
-      try{
-        const res = await fetch(IMAGES_LIST_TXT, { cache: "no-store" });
-        const txt = await res.text();
+    await refreshCounts();
+    clearPicked();
+    setTimeout(closePopup,500);
 
-        const files = txt
-          .split(/\r?\n/)
-          .map(s => s.trim())
-          .filter(Boolean);
+  }catch(e){
+    console.error(e);
+    elMsg.textContent="Lỗi mạng / sai link Web App";
+    elMsg.className="mt-3 text-sm text-red-300";
+  }finally{
+    elSubmitBtn.disabled=false;
+  }
+}
 
-        IMAGES = files.map((fn) => {
-          const id = baseName(fn);
-          return {
-            id,                 // image_id gửi lên Apps Script
-            title: id,          // hiển thị tên = tên file (không extension)
-            src: `images/vote/${fn}`,
-            note: ""
-          };
-        });
+/* ================= BXH ================= */
+async function refreshCounts(){
+  const data = await fetch(API,{cache:"no-store"}).then(r=>r.json());
+  counts = data.image_counts||{};
+  renderTop5();
+}
 
-      } catch(e){
-        console.error("loadImagesFromListTxt error:", e);
-        IMAGES = [];
-      }
-    }
+function renderTop5(){
+  const total = Object.values(counts).reduce((s,v)=>s+v,0);
+  elTotalVotes.textContent = total;
 
-    function getVotes(id){
-      return Number(countsCache[id]) || 0;
-    }
-    function getTotalVotes() {
-      return IMAGES.reduce((sum, img) => sum + getVotes(img.id), 0);
-    }
-    function getSortedByVotesDesc() {
-      return IMAGES
-        .map(img => ({ ...img, votes: getVotes(img.id) }))
-        .sort((a,b) => b.votes - a.votes);
-    }
+  elTopList.innerHTML = IMAGES
+    .map(x=>({id:x.id,v:counts[x.id]||0}))
+    .sort((a,b)=>b.v-a.v)
+    .slice(0,5)
+    .map((x,i)=>`
+      <div class="flex justify-between items-center glass p-3 rounded-xl">
+        <div class="flex items-center gap-3">
+          <div class="rank">#${i+1}</div>
+          <b>${x.id}</b>
+        </div>
+        <b>${x.v} vote</b>
+      </div>`).join("");
+}
 
-    function renderTop5(){
-      const total = getTotalVotes();
-      const topList = document.getElementById("topList");
-      document.getElementById("totalVotes").textContent = total.toLocaleString("vi-VN");
-
-      const sorted = getSortedByVotesDesc();
-      const top5 = sorted.slice(0, 5);
-
-      if (!top5.length) {
-        topList.innerHTML = `<div class="text-sm opacity-80">Chưa có dữ liệu vote.</div>`;
-        return;
-      }
-
-      topList.innerHTML = top5.map((x, idx) => {
-        const rank = idx + 1;
-        const pct = (total > 0) ? Math.round((x.votes / total) * 100) : 0;
-
-        return `
-          <div class="leader-row">
-            <div class="leader-left">
-              <div class="rank-pill">#${rank}</div>
-              <div style="min-width:0">
-                <div class="leader-title" title="${escapeHtml(x.title)}">${escapeHtml(x.title)}</div>
-                <div class="leader-meta">🩵 ${pct}% trên tổng vote</div>
-              </div>
-            </div>
-            <div class="vote-pill">🗳️ ${x.votes.toLocaleString("vi-VN")} vote</div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function renderGrid() {
-      const grid = document.getElementById("grid");
-
-      if (!IMAGES.length) {
-        grid.innerHTML = `<div class="glass rounded-2xl p-6 text-sm opacity-80">Không load được danh sách ảnh. Kiểm tra file <b>images/vote/list.txt</b>.</div>`;
-        renderTop5();
-        return;
-      }
-
-      grid.innerHTML = IMAGES.map(img => {
-        const count = getVotes(img.id);
-
-        return `
-          <div class="card glass rounded-2xl p-5">
-            <img class="img-full" src="${img.src}" alt="${escapeHtml(img.title)}" />
-            <div class="mt-4 flex items-start justify-between gap-3">
-              <div style="min-width:0">
-                <div class="font-bold text-blue-200">${escapeHtml(img.title)}</div>
-                ${img.note ? `<div class="text-sm opacity-80 mt-1">${escapeHtml(img.note)}</div>` : ``}
-              </div>
-              <div class="chip px-3 py-1 text-xs font-bold whitespace-nowrap">
-                🩵 <span id="count_${escapeHtml(img.id)}">${count}</span> vote
-              </div>
-            </div>
-
-            <button
-              onclick="openVote('${escapeHtml(img.id)}')"
-              class="mt-4 w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
-              Vote ảnh này
-            </button>
-          </div>
-        `;
-      }).join("");
-
-      renderTop5();
-    }
-
-    function setEmailHintUI(used, usedImageId){
-      const hint = document.getElementById("changeHint");
-      const info = document.getElementById("usedInfo");
-
-      emailUsed = !!used;
-      emailUsedImageId = usedImageId || "";
-
-      if (emailUsed) hint.classList.remove("hidden");
-      else hint.classList.add("hidden");
-
-      if (emailUsed && emailUsedImageId) {
-        const old = getImgById(emailUsedImageId);
-        if (old) {
-          info.classList.remove("hidden");
-          info.textContent = `Email này đã từng vote cho: ${old.title}.`;
-        } else {
-          info.classList.add("hidden");
-          info.textContent = "";
-        }
-      } else {
-        info.classList.add("hidden");
-        info.textContent = "";
-      }
-    }
-
-    function openVote(imageId) {
-      const img = getImgById(imageId);
-      if (!img) return;
-
-      selectedImageId = img.id;
-      selectedImageTitle = img.title;
-      selectedImageSrc = img.src;
-      selectedImageNote = img.note || "";
-
-      document.getElementById("voteSubtitle").textContent = `Bạn đang vote cho: ${img.title}`;
-
-      const preview = document.getElementById("votePreview");
-      const thumb = document.getElementById("voteThumb");
-      const name = document.getElementById("voteName");
-      const note = document.getElementById("voteNote");
-
-      if (preview) preview.style.display = "";
-      if (thumb) { thumb.src = img.src; thumb.alt = img.title; }
-      if (name) name.textContent = img.title;
-      if (note) note.textContent = img.note ? img.note : "—";
-
-      const emailEl = document.getElementById("emailInput");
-      emailEl.value = "";
-      setEmailHintUI(false, "");
-
-      document.getElementById("voteMsg").textContent = "";
-      document.getElementById("voteMsg").className = "mt-4 text-sm";
-
-      document.getElementById("votePopup").classList.remove("hidden");
-      emailEl.focus();
-    }
-
-    function closeVote() {
-      document.getElementById("votePopup").classList.add("hidden");
-      selectedImageId = null;
-      selectedImageTitle = null;
-      selectedImageSrc = null;
-      selectedImageNote = null;
-      setEmailHintUI(false, "");
-    }
-
-    document.getElementById("votePopup").addEventListener("click", (e) => {
-      if (e.target.id === "votePopup") closeVote();
-    });
-
-    document.getElementById("emailInput").addEventListener("input", () => {
-      clearTimeout(emailCheckTimer);
-
-      const email = document.getElementById("emailInput").value.trim().toLowerCase();
-      setEmailHintUI(false, "");
-
-      if (!isGmail(email)) return;
-
-      emailCheckTimer = setTimeout(async () => {
-        const info = await checkEmailUsed(email);
-        setEmailHintUI(info.used, info.image_id);
-      }, 450);
-    });
-
-    function isGmail(email) {
-      const v = (email || "").trim().toLowerCase();
-      return /^[a-z0-9._%+-]+@(gmail\.com|googlemail\.com)$/.test(v);
-    }
-
-    async function submitVote() {
-      const msg = document.getElementById("voteMsg");
-      const btn = document.getElementById("submitBtn");
-      const email = document.getElementById("emailInput").value.trim().toLowerCase();
-
-      if (!selectedImageId) {
-        msg.className = "mt-4 text-sm text-red-300";
-        msg.textContent = "Lỗi: chưa chọn ảnh.";
-        return;
-      }
-      if (!isGmail(email)) {
-        msg.className = "mt-4 text-sm text-red-300";
-        msg.textContent = "Vui lòng nhập Gmail hợp lệ (…@gmail.com).";
-        return;
-      }
-
-      try {
-        msg.className = "mt-4 text-sm text-blue-200";
-        msg.textContent = "Đang gửi vote...";
-        btn.disabled = true;
-        btn.textContent = "Đang gửi...";
-
-        const payload = { email, image_id: selectedImageId };
-
-        const res = await fetch(APPS_SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload),
-        });
-
-        const data = await res.json().catch(() => null);
-
-        if (!data || data.ok !== true) {
-          const err = (data && data.error) ? data.error : "Gửi thất bại.";
-          msg.className = "mt-4 text-sm text-red-300";
-          msg.textContent = err;
-          return;
-        }
-
-        const mode = (data && data.mode) ? String(data.mode).toLowerCase() : "";
-
-        msg.className = "mt-4 text-sm text-green-300";
-        msg.textContent = (mode === "updated")
-          ? "Đã đổi vote thành công! 🩵"
-          : "Vote thành công! Cảm ơn bạn 🩵";
-
-        await refreshCounts();
-        setTimeout(closeVote, 900);
-      } catch (e) {
-        console.error(e);
-        msg.className = "mt-4 text-sm text-red-300";
-        msg.textContent = "Lỗi mạng / CORS. Kiểm tra Web App access = Anyone.";
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "✅ Gửi vote";
-      }
-    }
-
-    async function checkEmailUsed(email){
-      try{
-        const url = APPS_SCRIPT_URL + "?check=" + encodeURIComponent(email);
-        const res = await fetch(url, { cache: "no-store" });
-        const data = await res.json().catch(() => null);
-        if (!data || data.ok !== true) return { used:false, image_id:"" };
-        return {
-          used: !!data.used,
-          image_id: (data.image_id ? String(data.image_id) : "")
-        };
-      } catch(e){
-        console.error("checkEmailUsed error:", e);
-        return { used:false, image_id:"" };
-      }
-    }
-
-    async function refreshCounts() {
-      try {
-        const res = await fetch(APPS_SCRIPT_URL, { cache: "no-store" });
-        const data = await res.json().catch(() => null);
-
-        if (data && data.ok === true && data.counts) {
-          countsCache = data.counts;
-        }
-        renderGrid();
-      } catch (e) {
-        console.error("refreshCounts error:", e);
-        renderGrid();
-      }
-    }
-
-    function escapeHtml(s) {
-      return String(s || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    (async function init(){
-      await loadImagesFromListTxt();   // ✅ load 65 ảnh
-      await refreshCounts();
-      setInterval(refreshCounts, AUTO_REFRESH_MS);
-    })();
-  </script>
+/* ================= INIT ================= */
+(async()=>{
+  await loadImages();
+  updateUI();
+  await refreshCounts();
+})();
+</script>
 </body>
 </html>
