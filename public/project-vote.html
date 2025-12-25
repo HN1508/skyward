@@ -14,7 +14,6 @@
     .card:hover { transform: translateY(-4px); transition: .2s; }
     #votePopup { backdrop-filter: blur(6px); }
 
-    /* ✅ Ảnh full kích thước (không crop) */
     .img-full{
       width: 100%;
       height: 320px;
@@ -79,7 +78,6 @@
       white-space: nowrap;
     }
 
-    /* ✅ Info ảnh trong popup */
     .vote-preview{
       margin-top: 10px;
       border-radius: 14px;
@@ -110,9 +108,6 @@
       line-height: 1.35;
     }
 
-    /* =========================
-       ✅ BACK BUTTON (giống mẫu)
-       ========================= */
     .btn-back{
       position: fixed;
       top: 18px;
@@ -172,13 +167,11 @@
 </head>
 
 <body class="pb-16">
-  <!-- ✅ Back button -->
   <a href="index.html" class="btn-back" aria-label="Về trang chính">
     <span class="icon">←</span>
     <span>Về trang chính</span>
   </a>
 
-  <!-- Header -->
   <header class="max-w-5xl mx-auto px-6 pt-8">
     <div class="flex items-center justify-between">
       <a href="/" class="text-blue-300 font-bold tracking-wide">SKYWARD</a>
@@ -191,7 +184,6 @@
     </div>
   </header>
 
-  <!-- Hero -->
   <section class="max-w-5xl mx-auto px-6 pt-10 pb-8">
     <div class="glass rounded-2xl p-8 md:p-10 shadow">
       <p class="text-sm text-blue-200 opacity-90">SKYWARD PROJECT</p>
@@ -233,7 +225,6 @@
 
   <hr class="divider my-8 max-w-5xl mx-auto"/>
 
-  <!-- Top 5 -->
   <section class="max-w-5xl mx-auto px-6 pb-10" id="leaderboard">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold text-blue-300">🏆 Top 5 dẫn đầu</h2>
@@ -257,7 +248,6 @@
 
   <hr class="divider my-8 max-w-5xl mx-auto"/>
 
-  <!-- Gallery -->
   <section class="max-w-5xl mx-auto px-6 pb-12" id="gallery">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold text-blue-300">📸 Album vote</h2>
@@ -277,7 +267,6 @@
     💙 From Skyward & Sky with love
   </footer>
 
-  <!-- Vote Popup -->
   <div id="votePopup" class="fixed inset-0 bg-black bg-opacity-70 hidden p-6">
     <div class="max-w-md mx-auto bg-gray-900 p-6 rounded-2xl shadow-xl border border-gray-700">
       <div class="flex items-start justify-between gap-3">
@@ -288,7 +277,6 @@
         <button onclick="closeVote()" class="px-3 py-1 rounded-full chip hover:bg-opacity-10 text-sm font-semibold">✕</button>
       </div>
 
-      <!-- ✅ Info ảnh đang vote -->
       <div class="vote-preview" id="votePreview" style="display:none;">
         <img class="vote-thumb" id="voteThumb" src="" alt="" />
         <div style="min-width:0">
@@ -302,12 +290,10 @@
         <input id="emailInput" type="email" placeholder="yourname@gmail.com"
           class="mt-2 w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-400"/>
 
-        <!-- ✅ CHỈ HIỆN KHI EMAIL ĐÃ DÙNG -->
         <div id="changeHint" class="text-xs opacity-70 mt-2 hidden">
           * <b>Vote lại bằng email này</b> sẽ <b>đổi sang ảnh mới</b> (không tạo vote mới).
         </div>
 
-        <!-- (tuỳ chọn) thông báo email từng vote cho ảnh nào -->
         <div id="usedInfo" class="text-xs opacity-60 mt-1 hidden"></div>
       </div>
 
@@ -325,29 +311,24 @@
   </div>
 
   <script>
-    // =========================
-    // CONFIG
-    // =========================
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyW21TNlVMNLp0Yj4JHSwc-m141GJleC_2i7-kqIjla0k-Y7GhI6fV1ffPLMh2sjE5M/exec";
     const AUTO_REFRESH_MS = 30000;
 
-    const IMAGES = [
-      { id: "img1", title: "Phương Nguyên", src: "images/vote/phuongnguyen.jpg", note: "Ảnh của Phương Nguyên" },
-      { id: "img2", title: "Ngọc Liên",   src: "images/vote/ngoclien.jpg",   note: "Ảnh của Ngọc Liên" },
-      { id: "img3", title: "Thanh Nhàn",  src: "images/vote/thanhnhan.jpg",  note: "Ảnh của Thanh Nhàn" },
-    ];
+    // ✅ list.txt nằm đúng path này
+    const IMAGES_LIST_TXT = "images/vote/list.txt";
 
     // =========================
     // STATE
     // =========================
+    let IMAGES = [];
+
     let selectedImageId = null;
     let selectedImageTitle = null;
     let selectedImageSrc = null;
     let selectedImageNote = null;
 
-    let countsCache = {}; // {img1: n, img2: n...}
+    let countsCache = {}; // {image_id: n, ...}
 
-    // Email check state
     let emailUsed = false;
     let emailUsedImageId = "";
     let emailCheckTimer = null;
@@ -356,9 +337,38 @@
       return IMAGES.find(x => x.id === id) || null;
     }
 
-    // =========================
-    // CALC
-    // =========================
+    function baseName(file){
+      const s = String(file || "").trim();
+      return s.replace(/\.[^.]+$/, "");
+    }
+
+    // ✅ Load ảnh từ list.txt
+    async function loadImagesFromListTxt(){
+      try{
+        const res = await fetch(IMAGES_LIST_TXT, { cache: "no-store" });
+        const txt = await res.text();
+
+        const files = txt
+          .split(/\r?\n/)
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        IMAGES = files.map((fn) => {
+          const id = baseName(fn);
+          return {
+            id,                 // image_id gửi lên Apps Script
+            title: id,          // hiển thị tên = tên file (không extension)
+            src: `images/vote/${fn}`,
+            note: ""
+          };
+        });
+
+      } catch(e){
+        console.error("loadImagesFromListTxt error:", e);
+        IMAGES = [];
+      }
+    }
+
     function getVotes(id){
       return Number(countsCache[id]) || 0;
     }
@@ -371,9 +381,6 @@
         .sort((a,b) => b.votes - a.votes);
     }
 
-    // =========================
-    // RENDER: TOP 5
-    // =========================
     function renderTop5(){
       const total = getTotalVotes();
       const topList = document.getElementById("topList");
@@ -406,11 +413,14 @@
       }).join("");
     }
 
-    // =========================
-    // RENDER: GRID
-    // =========================
     function renderGrid() {
       const grid = document.getElementById("grid");
+
+      if (!IMAGES.length) {
+        grid.innerHTML = `<div class="glass rounded-2xl p-6 text-sm opacity-80">Không load được danh sách ảnh. Kiểm tra file <b>images/vote/list.txt</b>.</div>`;
+        renderTop5();
+        return;
+      }
 
       grid.innerHTML = IMAGES.map(img => {
         const count = getVotes(img.id);
@@ -424,12 +434,12 @@
                 ${img.note ? `<div class="text-sm opacity-80 mt-1">${escapeHtml(img.note)}</div>` : ``}
               </div>
               <div class="chip px-3 py-1 text-xs font-bold whitespace-nowrap">
-                🩵 <span id="count_${img.id}">${count}</span> vote
+                🩵 <span id="count_${escapeHtml(img.id)}">${count}</span> vote
               </div>
             </div>
 
             <button
-              onclick="openVote('${img.id}')"
+              onclick="openVote('${escapeHtml(img.id)}')"
               class="mt-4 w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold">
               Vote ảnh này
             </button>
@@ -440,9 +450,6 @@
       renderTop5();
     }
 
-    // =========================
-    // POPUP
-    // =========================
     function setEmailHintUI(used, usedImageId){
       const hint = document.getElementById("changeHint");
       const info = document.getElementById("usedInfo");
@@ -450,11 +457,9 @@
       emailUsed = !!used;
       emailUsedImageId = usedImageId || "";
 
-      // ✅ đúng yêu cầu: chỉ hiện hint khi email đã dùng
       if (emailUsed) hint.classList.remove("hidden");
       else hint.classList.add("hidden");
 
-      // (tuỳ chọn) show "đã vote cho ..." khi used
       if (emailUsed && emailUsedImageId) {
         const old = getImgById(emailUsedImageId);
         if (old) {
@@ -481,7 +486,6 @@
 
       document.getElementById("voteSubtitle").textContent = `Bạn đang vote cho: ${img.title}`;
 
-      // ✅ fill preview
       const preview = document.getElementById("votePreview");
       const thumb = document.getElementById("voteThumb");
       const name = document.getElementById("voteName");
@@ -494,8 +498,6 @@
 
       const emailEl = document.getElementById("emailInput");
       emailEl.value = "";
-
-      // reset hint (ẩn)
       setEmailHintUI(false, "");
 
       document.getElementById("voteMsg").textContent = "";
@@ -518,13 +520,10 @@
       if (e.target.id === "votePopup") closeVote();
     });
 
-    // ✅ check email realtime (debounce)
     document.getElementById("emailInput").addEventListener("input", () => {
       clearTimeout(emailCheckTimer);
 
       const email = document.getElementById("emailInput").value.trim().toLowerCase();
-
-      // reset UI trước
       setEmailHintUI(false, "");
 
       if (!isGmail(email)) return;
@@ -535,9 +534,6 @@
       }, 450);
     });
 
-    // =========================
-    // SUBMIT VOTE (UPSERT)
-    // =========================
     function isGmail(email) {
       const v = (email || "").trim().toLowerCase();
       return /^[a-z0-9._%+-]+@(gmail\.com|googlemail\.com)$/.test(v);
@@ -565,7 +561,6 @@
         btn.disabled = true;
         btn.textContent = "Đang gửi...";
 
-        // ✅ upsert: server sẽ tự insert/update theo email
         const payload = { email, image_id: selectedImageId };
 
         const res = await fetch(APPS_SCRIPT_URL, {
@@ -583,15 +578,12 @@
           return;
         }
 
-        // ✅ mode: "created" | "updated"
         const mode = (data && data.mode) ? String(data.mode).toLowerCase() : "";
 
         msg.className = "mt-4 text-sm text-green-300";
-        if (mode === "updated") {
-          msg.textContent = "Đã đổi vote thành công! 🩵";
-        } else {
-          msg.textContent = "Vote thành công! Cảm ơn bạn 🩵";
-        }
+        msg.textContent = (mode === "updated")
+          ? "Đã đổi vote thành công! 🩵"
+          : "Vote thành công! Cảm ơn bạn 🩵";
 
         await refreshCounts();
         setTimeout(closeVote, 900);
@@ -605,10 +597,6 @@
       }
     }
 
-    // =========================
-    // CHECK EMAIL USED
-    // expects: {ok:true, used:true/false, image_id:"img1"}  (image_id optional)
-    // =========================
     async function checkEmailUsed(email){
       try{
         const url = APPS_SCRIPT_URL + "?check=" + encodeURIComponent(email);
@@ -625,9 +613,6 @@
       }
     }
 
-    // =========================
-    // FETCH COUNTS
-    // =========================
     async function refreshCounts() {
       try {
         const res = await fetch(APPS_SCRIPT_URL, { cache: "no-store" });
@@ -643,9 +628,6 @@
       }
     }
 
-    // =========================
-    // HELPERS
-    // =========================
     function escapeHtml(s) {
       return String(s || "")
         .replaceAll("&", "&amp;")
@@ -655,10 +637,8 @@
         .replaceAll("'", "&#039;");
     }
 
-    // =========================
-    // INIT
-    // =========================
     (async function init(){
+      await loadImagesFromListTxt();   // ✅ load 65 ảnh
       await refreshCounts();
       setInterval(refreshCounts, AUTO_REFRESH_MS);
     })();
